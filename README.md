@@ -14,6 +14,6 @@ I'm Rashed, a cross-functional innovator with a passion for data science and sus
   
 - 😄 Pronouns: He/Him
   
-- ⚡ Fun fact: I co-founded "Farmers for Peace," an initiative that housed 30 Ukrainian refugees.
+- ⚡ Fun fact: I co-developed "Farmers for Peace," an initiative that housed 30 Ukrainian refugees.
 
 Looking forward to connecting with like-minded individuals and contributing to meaningful projects! 🌍✨
