@@ -1,16 +1,19 @@
-### Hi there 👋
+### Hi there! 👋
 
-<!--
-**shedman68/shedman68** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+I'm Rashed, a cross-functional innovator with a passion for data science and sustainability. Here's a bit about me:
 
-Here are some ideas to get you started:
+- 🔭 I’m currently working on expanding my knowledge in machine learning algorithms and their applications in sustainable development.
+  
+- 🌱 I’m currently learning advanced Python libraries for data analysis and diving deeper into sustainability frameworks like SBTi, GRI, and SDG.
+  
+- 👯 I’m looking to collaborate on projects that combine data science with environmental impact analysis or sustainable business practices.
+  
+- 💬 Ask me about my experience in developing web-based impact recommendation platforms, managing sustainability initiatives, and analyzing operational processes for sustainability improvements.
+  
+- 📫 How to reach me: [rashed@earthpact.co.uk](mailto:rashed@earthpact.co.uk)
+  
+- 😄 Pronouns: He/Him
+  
+- ⚡ Fun fact: I co-founded "Farmers for Peace," an initiative that housed 30 Ukrainian refugees.
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+Looking forward to connecting with like-minded individuals and contributing to meaningful projects! 🌍✨
