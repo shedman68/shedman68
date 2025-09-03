@@ -10,7 +10,7 @@ I'm Rashed, a cross-functional innovator with a passion for data science and sus
   
 - 💬 Ask me about my experience in developing web-based impact recommendation platforms, managing sustainability initiatives, and analyzing operational processes for sustainability improvements.
   
-- 📫 How to reach me: [rashed@earthpact.co.uk](mailto:rashed@earthpact.co.uk)
+- 📫 How to reach me: [rashed@earthpact.ch](mailto:rashed@earthpact.ch)
   
 - 😄 Pronouns: He/Him
   
