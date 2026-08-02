@@ -42,6 +42,10 @@ const CHEM_INFO = {
         body: "Sugary food, alcohol and vapes, porn, gambling, online shopping, social media. All fast, all effortless, and all of them leave your baseline lower than they found it." },
       { title: "Every resisted urge is a rep",
         body: "Pick the quick-dopamine habit with the strongest grip on you. Each time the urge arrives and you don't act on it, that's one rep in the gym for your brain — and the muscle you're training is willpower." },
+      { title: "Your first hit sets the direction",
+        body: "Wherever your brain gets its first dopamine of the day, it keeps steering you that way for hours afterwards. Start with scrolling and it will hunt for more of the same. Start with something that took a little effort and the whole day tilts toward effort." },
+      { title: "You're in the driving seat",
+        body: "This is the part worth keeping: how motivated you feel isn't fixed. Lean on the quick hits and anything meaningful starts to feel like a chore. Prioritise the earned kind and chasing the life you actually want gets easier than it's ever been." },
     ],
   },
 
@@ -52,14 +56,16 @@ const CHEM_INFO = {
 };
 
 /* ─── The 20 actions, five per chemical ───
-   `learn` is optional: bites (why it works), steps (a protocol),
-   and chips (a quick reference list).                        */
+   `short`  one line, shown on the daily checklist
+   `desc`   fuller framing, opens the detail sheet
+   `learn`  optional depth: bites, steps, quote, groups, list, challenge */
 
 const ACTIONS = [
   /* ── Dopamine ── */
   {
     id: "flow", chem: "d", time: "morning", emoji: "🎯", title: "Flow State",
-    desc: "One distraction-free block of deep focus on the thing that matters most. Push through the first awkward fifteen minutes and let momentum take over.",
+    short: "Enter deep states of focus.",
+    desc: "One distraction-free block of deep focus on the thing that matters most. Push past the first fifteen minutes and momentum takes over.",
     learn: {
       bites: [
         { title: "The first fifteen minutes are the wall",
@@ -68,6 +74,8 @@ const ACTIONS = [
           body: "Huge to-do lists are how procrastination starts: you look at everything at once and reach for your phone instead. Switching between tasks can cost you around 40% of your productivity. Pick one thing and finish it." },
         { title: "Harder work pays you more",
           body: "The more effort a task demands, the more dopamine your brain builds from it. Tackle the challenging thing in the morning and the lift carries through the rest of your day." },
+        { title: "Some brains feel it more",
+          body: "A lower dopamine baseline means a steeper rise during an activity you genuinely love. That's why an ADHD brain can find starting almost impossible, then disappear into hyperfocus once it's in. Finding the right activity matters more, not less." },
       ],
       steps: [
         { title: "Select the task",
@@ -79,40 +87,67 @@ const ACTIONS = [
         { title: "The stopwatch challenge",
           body: "Airplane mode on, start your phone's stopwatch, and leave it face up in another room. When you break, go and see how long you lasted. Then beat it tomorrow. Aim for fifteen minutes first, then thirty, then forty-five." },
       ],
-      chips: {
-        title: "Flow can happen in",
-        items: ["Running or the gym", "Playing an instrument", "Painting or drawing",
-                "Writing or journalling", "Coding or problem solving", "Gardening",
-                "Cleaning", "Reading"],
+      groups: {
+        title: "Find something you love",
+        note: "Flow needs an activity worth entering. Experiment until one of these genuinely pulls you in.",
+        sets: [
+          { name: "Artistic", items: ["Drawing", "Writing", "Painting", "Music", "Video", "Craft", "Knitting"] },
+          { name: "Educational", items: ["Studying", "Problem solving", "Puzzles", "Podcasts", "Reading", "Learning a new skill"] },
+          { name: "Sport-based", items: ["Football", "Swimming", "Working out", "Dance", "Golf", "Yoga", "Cycling"] },
+        ],
+      },
+      challenge: {
+        title: "The 7-day Flow State Challenge",
+        body: "One deep-focus session on your chosen activity every day for the next seven days — morning, afternoon, or both. Tell someone close to you that you're doing it. Every time you notice the pull of distraction and stay with the task anyway, you strengthen the part of your brain that makes focus possible.",
       },
     },
   },
   {
     id: "discipline", chem: "d", time: "morning", emoji: "🛏️", title: "Discipline",
+    short: "Keep an organised, clean and calm home.",
     desc: "Win the small stuff early — make your bed, tidy your space. An ordered environment quiets a cluttered mind.",
     learn: {
       bites: [
         { title: "Your space is your mind, externalised",
           body: "An organised room tends to produce organised thinking. Clean it, then notice how much clearer your head feels for the rest of the day." },
         { title: "Start with the bed",
-          body: "Getting up and making your bed is a tiny, deliberate win banked before the day has had a chance to push you around." },
+          body: "Getting up and making your bed is a tiny, deliberate win banked before the day has had a chance to push you around — and it's the first dopamine of your day, earned rather than swiped." },
       ],
+      list: {
+        title: "Healthy ways to start a morning",
+        items: ["Making your bed", "Going outside", "Cold shower", "Washing your face",
+                "Reading", "Brushing your teeth"],
+      },
     },
   },
   {
     id: "phonefast", chem: "d", time: "morning", emoji: "📵", title: "Phone Fasting",
-    desc: "Keep your phone out of reach for the first hour of the day, and an hour before bed. Let your brain wake up before the internet does.",
+    short: "Find space from your phone, morning and evening.",
+    desc: "A daily commitment to time away from your phone — a protected stretch of the morning, and a proper block in the evening.",
     learn: {
       bites: [
         { title: "The first hour sets the tone",
-          body: "Reaching for your phone on waking hands your attention away before you've had the chance to claim it yourself. Protect that first hour and the whole day starts differently." },
+          body: "Reaching for your phone on waking hands your attention away before you've had a chance to claim it yourself. Protect that first stretch and the whole day starts differently." },
         { title: "Finding space from it is a skill",
           body: "Distance from your phone isn't a single decision, it's a capacity you build. It isn't easy at first, and it keeps repaying you for years." },
       ],
+      steps: [
+        { title: "The morning fast",
+          body: "Don't touch your phone until one of two things has happened: you're washed, dressed and ready for the day, or you've been outside and seen daylight." },
+        { title: "The evening fast",
+          body: "Aim for a minimum of sixty unbroken minutes in the evening without seeing your phone at all. Evenings are where scrolling quietly eats the time meant for connection, rest and exercise." },
+      ],
+      quote: "I must see sunlight before I see social media.",
+      list: {
+        title: "Good windows for the evening fast",
+        items: ["While exercising — phone in a locker, or airplane mode and music only",
+                "While cooking and eating dinner — phone in another room"],
+      },
     },
   },
   {
     id: "coldwater", chem: "d", time: "morning", emoji: "🧊", title: "Cold Water",
+    short: "Turn your shower cold to supercharge motivation.",
     desc: "Finish your shower cold for 30–60 seconds. It bites for a moment, then repays you with energy and drive all morning.",
     learn: {
       bites: [
@@ -125,51 +160,83 @@ const ACTIONS = [
   },
   {
     id: "pursuit", chem: "d", time: "midday", emoji: "🧭", title: "My Pursuit",
-    desc: "A short stretch of time outdoors, phone-free, dreaming about and planning the future you're building.",
+    short: "Choose the goal you're really seeking in life.",
+    desc: "A phone-free walk outdoors, thinking properly about the future you're building and what you're actually aiming at.",
     learn: {
       bites: [
         { title: "A goal worth giving things up for",
           body: "The test of a real pursuit is simple: is it compelling enough that you'd let go of the easy hits — the scrolling, the sugar, the drink — in order to reach it?" },
-        { title: "Dream it somewhere without a screen",
-          body: "A short walk outdoors, no phone, just thinking about where you're heading. Nothing is more powerful than a vision of the future that lights a fire inside you." },
+        { title: "Hopes need quiet to become plans",
+          body: "Most of us have hopes and dreams and stay too distracted to do anything with them. Nothing is more powerful than a vision of the future that lights a fire inside you — but it needs uninterrupted time to take shape." },
       ],
+      steps: [
+        { title: "Walk without your phone",
+          body: "Head somewhere natural, ideally in the morning. If you need the phone with you to feel safe, put it in your bag on airplane mode." },
+        { title: "Ask yourself two questions",
+          body: "“What is my pursuit?” and “What am I really seeking in my life right now?” Talk it through out loud with yourself if that helps — it usually does." },
+        { title: "Give it real time, in silence",
+          body: "No podcasts, no music. Around forty-five minutes of genuinely turning the question over is what separates coming home with a plan from coming home with a vague intention." },
+      ],
+      list: {
+        title: "The pursuit you want most",
+        items: ["Career", "Family", "Health", "Creativity", "Your DOSE"],
+      },
+      challenge: {
+        title: "Find your pursuit",
+        body: "Take the walk in silence, then tell someone you're close to exactly which of the five you've chosen and why it matters to you right now.",
+      },
     },
   },
 
   /* ── Oxytocin ── */
   { id: "contribution", chem: "o", time: "midday",  emoji: "🤝", title: "Contribution",
+    short: "Do one thing that supports someone else.",
     desc: "Do one thing today that supports someone else, however small. Helping others is the fastest route to feeling connected." },
   { id: "touch",        chem: "o", time: "evening", emoji: "🫂", title: "Touch",
+    short: "Hug the people or pets you love.",
     desc: "Hug the people (or pets) you love. Warm physical connection settles your whole nervous system." },
   { id: "social",       chem: "o", time: "midday",  emoji: "☕", title: "Social Life",
+    short: "Make real contact with someone you care about.",
     desc: "Reach out or meet up — a walk, a coffee, or just a genuine check-in message to someone you care about." },
   { id: "gratitude",    chem: "o", time: "evening", emoji: "🙏", title: "Gratitude",
+    short: "Name one thing you're grateful for.",
     desc: "Pause for a few seconds and name one thing you're honestly grateful for today. Small and specific beats big and vague." },
   { id: "achievements", chem: "o", time: "evening", emoji: "🏅", title: "Achievements",
+    short: "Celebrate a step you took today.",
     desc: "Notice your progress. Celebrate one step you took today instead of instantly chasing the next one." },
 
   /* ── Serotonin ── */
   { id: "nature",     chem: "s", time: "midday",  emoji: "🌳", title: "Nature",
+    short: "Get into green or blue space and take it in.",
     desc: "Get to some green or blue space and actually take it in — look, listen, breathe. A park bench counts." },
   { id: "sunlight",   chem: "s", time: "morning", emoji: "☀️", title: "Sunlight",
+    short: "See daylight before you see a screen.",
     desc: "Get daylight in your eyes before you get social media in your brain. A few minutes outside early sets your whole day's rhythm." },
   { id: "guthealth",  chem: "s", time: "midday",  emoji: "🥗", title: "Gut Health",
+    short: "Feed your gut real food today.",
     desc: "Feed your gut real food today — fruit, veg, protein, water — and go easy on the ultra-processed stuff." },
   { id: "underthink", chem: "s", time: "evening", emoji: "🌬️", title: "Underthinking",
+    short: "Breathe slowly and quiet a busy mind.",
     desc: "A few minutes of slow breathing to quiet a busy mind. In slowly through the nose, out even slower." },
   { id: "deepsleep",  chem: "s", time: "evening", emoji: "😴", title: "Deep Sleep",
+    short: "Protect tonight's sleep.",
     desc: "Protect tonight's sleep: a reasonable bedtime, phone out of the bedroom. Tomorrow's mood is built tonight." },
 
   /* ── Endorphins ── */
   { id: "exercise",   chem: "e", time: "midday",  emoji: "🏃", title: "Exercise",
+    short: "Move your body in a way you enjoy.",
     desc: "Move your body in a way you could keep doing for years — walk, lift, run, swim, play. Any movement counts." },
   { id: "heat",       chem: "e", time: "evening", emoji: "🛁", title: "Heat",
+    short: "Let heat melt the day's tension.",
     desc: "A hot bath, shower or sauna — let heat melt the tension of the day away from your phone." },
   { id: "music",      chem: "e", time: "morning", emoji: "🎶", title: "Music",
+    short: "Play songs you love and sing along.",
     desc: "Put on songs you love and sing along. Loudly is better. Dancing is extra credit." },
   { id: "laughter",   chem: "e", time: "evening", emoji: "😂", title: "Laughter",
+    short: "Find the funny side today.",
     desc: "Find the funny side today — share a laugh with someone, or watch something that genuinely cracks you up." },
   { id: "stretch",    chem: "e", time: "morning", emoji: "🧘", title: "Stretching",
+    short: "Give your body the stretch it's asking for.",
     desc: "Give your body the stretch it's asking for — reach up, hang, twist. One or two minutes is plenty." },
 ];
 

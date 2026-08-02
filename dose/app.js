@@ -255,7 +255,7 @@ function renderActions() {
         <span class="check">✓</span>
       </button>
       <div class="action-desc">
-        ${a.desc}
+        ${a.short}
         ${a.learn ? `<button class="learn-link" data-learn="${a.id}">Why it works →</button>` : ""}
       </div>
     </div>`;
@@ -394,11 +394,12 @@ function sheetHead(kicker, title, color) {
 }
 
 function pillList(title, items, cls) {
-  return `
-    <div class="pill-group">
-      <div class="pill-title">${title}</div>
-      <div class="pills">${items.map(i => `<span class="pill ${cls || ""}">${i}</span>`).join("")}</div>
-    </div>`;
+  // sentence-length entries read better as rows than as tags
+  const long = items.some(i => i.length > 30);
+  const inner = long
+    ? `<div class="note-list">${items.map(i => `<div class="note-item">${i}</div>`).join("")}</div>`
+    : `<div class="pills">${items.map(i => `<span class="pill ${cls || ""}">${i}</span>`).join("")}</div>`;
+  return `<div class="pill-group"><div class="pill-title">${title}</div>${inner}</div>`;
 }
 
 function biteCards(bites, chem) {
@@ -449,7 +450,7 @@ function actionRows(chem) {
       <span class="mini-emoji">${a.emoji}</span>
       <span class="mini-main">
         <span class="mini-title">${a.title}</span>
-        <span class="mini-sub">${TIME_LABEL[a.time]}</span>
+        <span class="mini-sub">${a.short}</span>
       </span>
       <span class="mini-arrow">›</span>
     </button>`).join("") + `</div>`;
@@ -483,7 +484,30 @@ function openActionSheet(id) {
         </div>`).join("") + `</div>`;
   }
 
-  if (L && L.chips) body += pillList(L.chips.title, L.chips.items);
+  if (L && L.quote) {
+    body += `<blockquote class="quote c-${a.chem}">“${L.quote}”</blockquote>`;
+  }
+
+  if (L && L.groups) {
+    body += `<div class="section-label">${L.groups.title}</div>`;
+    if (L.groups.note) body += `<p class="group-note">${L.groups.note}</p>`;
+    body += L.groups.sets.map(s => `
+      <div class="group-block">
+        <div class="group-name c-${a.chem}">${s.name}</div>
+        <div class="pills">${s.items.map(i => `<span class="pill">${i}</span>`).join("")}</div>
+      </div>`).join("");
+  }
+
+  if (L && L.list) body += pillList(L.list.title, L.list.items);
+
+  if (L && L.challenge) {
+    body += `
+      <div class="challenge c-${a.chem}">
+        <div class="challenge-label">Challenge</div>
+        <div class="challenge-title">${L.challenge.title}</div>
+        <p class="challenge-body">${L.challenge.body}</p>
+      </div>`;
+  }
 
   if (!L) body += `<p class="sheet-sub">More detail on this action is being added.</p>`;
 
