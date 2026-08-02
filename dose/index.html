@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>DOSE Daily</title>
+  <meta name="description" content="A gentle daily checklist for your dopamine, oxytocin, serotonin and endorphins.">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#12101a" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#faf8f4" media="(prefers-color-scheme: light)">
+
+  <!-- iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="DOSE">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ══════════ ONBOARDING ══════════ -->
+  <div id="onboarding" class="onboarding hidden" aria-hidden="true">
+    <div class="ob-inner">
+      <div class="ob-progress"><div id="obBar" class="ob-bar"></div></div>
+      <div id="obContent" class="ob-content"></div>
+      <div class="ob-actions">
+        <button id="obNext" class="btn-primary">Continue</button>
+        <button id="obSkip" class="btn-ghost">Skip for now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ APP ══════════ -->
+  <div id="app" class="app hidden">
+
+    <!-- Today view -->
+    <main id="viewToday" class="view">
+      <header class="top">
+        <div>
+          <h1 id="greeting">Good morning</h1>
+          <p id="dateLine" class="date-line"></p>
+        </div>
+        <button id="streakBadge" class="streak" aria-label="Current streak">
+          <span class="flame">🔥</span><span id="streakNum">0</span>
+        </button>
+      </header>
+
+      <!-- Daily DOSE ring -->
+      <section class="hero card">
+        <div class="ring-wrap">
+          <svg id="ring" viewBox="0 0 120 120" width="118" height="118" aria-hidden="true"></svg>
+          <div class="ring-center">
+            <span id="ringCount">0/4</span>
+            <span class="ring-label">DOSE</span>
+          </div>
+        </div>
+        <div class="hero-side">
+          <div id="chemChips" class="chem-chips"></div>
+          <p id="heroLine" class="hero-line">Your four chosen actions make a full DOSE day.</p>
+        </div>
+      </section>
+
+      <!-- Nudge / praise line -->
+      <section id="nudge" class="nudge hidden"></section>
+
+      <!-- Time tabs -->
+      <nav class="tabs" aria-label="Time of day">
+        <button class="tab" data-time="morning">☀️ Morning</button>
+        <button class="tab" data-time="midday">🌤 Midday</button>
+        <button class="tab" data-time="evening">🌙 Evening</button>
+      </nav>
+
+      <section id="actionList" class="action-list"></section>
+
+      <p class="footnote">Inspired by the DOSE framework from TJ Power’s <em>The DOSE Effect</em>. Check what you did — nothing here is homework.</p>
+    </main>
+
+    <!-- Patterns view -->
+    <main id="viewPatterns" class="view hidden">
+      <header class="top"><h1>Patterns</h1></header>
+
+      <section class="card stats-row" id="statsRow"></section>
+
+      <section class="card">
+        <h2 class="card-title">Last 4 weeks</h2>
+        <p class="card-sub">Each day shows which chemicals you fed.</p>
+        <div id="heatmap" class="heatmap"></div>
+        <div class="legend" id="legend"></div>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">This week, by chemical</h2>
+        <div id="chemBars" class="chem-bars"></div>
+      </section>
+    </main>
+
+    <!-- Bottom nav -->
+    <nav class="bottom-nav">
+      <button id="navToday" class="nav-btn active">
+        <span class="nav-ico">✓</span><span>Today</span>
+      </button>
+      <button id="navPatterns" class="nav-btn">
+        <span class="nav-ico">▦</span><span>Patterns</span>
+      </button>
+      <button id="navSettings" class="nav-btn">
+        <span class="nav-ico">⚙</span><span>Settings</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Settings sheet -->
+  <div id="sheetBackdrop" class="sheet-backdrop hidden">
+    <div id="sheet" class="sheet" role="dialog" aria-modal="true">
+      <div class="sheet-handle"></div>
+      <div id="sheetContent" class="sheet-content"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Celebration -->
+  <div id="celebrate" class="celebrate hidden" aria-hidden="true"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
