@@ -1,10 +1,11 @@
 /* DOSE Daily — service worker: cache-first app shell, refreshed in the background */
 
-const VERSION = "dose-v1.0.0";
+const VERSION = "dose-v1.1.0";
 const SHELL = [
   ".",
   "index.html",
   "styles.css",
+  "content.js",
   "app.js",
   "manifest.webmanifest",
   "icons/icon-192.png",

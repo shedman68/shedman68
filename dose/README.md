@@ -17,6 +17,10 @@ chemicals in balance — **D**opamine, **O**xytocin, **S**erotonin and
   so you can spot what's quietly missing.
 - One gentle **nudge** per day toward your most-neglected chosen action.
   Praise for what you did; no guilt for what you didn't.
+- **Bite-sized learning**, never a wall of text: one rotating insight card a
+  day on the home screen, a summary sheet per chemical (what it does, what
+  drains it, what low and high feel like), and a "why it works / how to do
+  it" sheet per action.
 
 All data stays in your browser's local storage — no accounts, no servers,
 no tracking. Use *Settings → Export data* for a backup.
@@ -40,8 +44,13 @@ No build step, no dependencies. It's four files:
 |---|---|
 | `index.html` | App shell and views |
 | `styles.css` | Design system (light + dark mode) |
-| `app.js` | Actions, state, rendering, streaks |
+| `content.js` | Actions and all educational content |
+| `app.js` | State, rendering, streaks, sheets |
 | `sw.js` | Service worker for offline use |
+
+Content is deliberately separated from logic: adding a chemical's material
+means editing `content.js` only. Set a chemical's `ready: true` once its
+summary fields are filled in.
 
 Serve locally with `python3 -m http.server` and open `localhost:8000`.
 

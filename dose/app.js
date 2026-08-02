@@ -1,82 +1,15 @@
 /* ═══════════════════ DOSE Daily ═══════════════════
    A gentle daily checklist for the four feel-good brain
-   chemicals, inspired by the DOSE framework.
-   All data lives in localStorage on this device only.  */
+   chemicals. Content lives in content.js.
+   All data stays in localStorage on this device only.   */
 
 "use strict";
-
-/* ─── The 20 actions, five per chemical ─── */
-
-const CHEMS = {
-  d: { key: "d", letter: "D", name: "Dopamine",   line: "Drive & motivation" },
-  o: { key: "o", letter: "O", name: "Oxytocin",   line: "Connection & love" },
-  s: { key: "s", letter: "S", name: "Serotonin",  line: "Mood & energy" },
-  e: { key: "e", letter: "E", name: "Endorphins", line: "Stress relief" },
-};
-
-const ACTIONS = [
-  // Dopamine
-  { id: "flow",       chem: "d", time: "morning", emoji: "🎯", title: "Flow State",
-    desc: "One distraction-free block of deep focus on the thing that matters most. Push through the first awkward 15 minutes and let momentum take over." },
-  { id: "discipline", chem: "d", time: "morning", emoji: "🛏️", title: "Discipline",
-    desc: "Win the small stuff early — make your bed, tidy your space. An ordered environment quiets a cluttered mind." },
-  { id: "phonefast",  chem: "d", time: "morning", emoji: "📵", title: "Phone Fasting",
-    desc: "Keep your phone out of reach for the first hour of the day (and the last). Let your brain wake up before the internet does." },
-  { id: "coldwater",  chem: "d", time: "morning", emoji: "🧊", title: "Cold Water",
-    desc: "Finish your shower cold for 30–60 seconds. It bites for a moment, then repays you with energy and drive all morning." },
-  { id: "pursuit",    chem: "d", time: "midday",  emoji: "🧭", title: "My Pursuit",
-    desc: "A short stretch of time outdoors, phone-free, dreaming about and planning the future you're building." },
-
-  // Oxytocin
-  { id: "contribution", chem: "o", time: "midday",  emoji: "🤝", title: "Contribution",
-    desc: "Do one thing today that supports someone else, however small. Helping others is the fastest route to feeling connected." },
-  { id: "touch",        chem: "o", time: "evening", emoji: "🫂", title: "Touch",
-    desc: "Hug the people (or pets) you love. Warm physical connection settles your whole nervous system." },
-  { id: "social",       chem: "o", time: "midday",  emoji: "☕", title: "Social Life",
-    desc: "Reach out or meet up — a walk, a coffee, or just a genuine check-in message to someone you care about." },
-  { id: "gratitude",    chem: "o", time: "evening", emoji: "🙏", title: "Gratitude",
-    desc: "Pause for a few seconds and name one thing you're honestly grateful for today. Small and specific beats big and vague." },
-  { id: "achievements", chem: "o", time: "evening", emoji: "🏅", title: "Achievements",
-    desc: "Notice your progress. Celebrate one step you took today instead of instantly chasing the next one." },
-
-  // Serotonin
-  { id: "nature",     chem: "s", time: "midday",  emoji: "🌳", title: "Nature",
-    desc: "Get to some green or blue space and actually take it in — look, listen, breathe. A park bench counts." },
-  { id: "sunlight",   chem: "s", time: "morning", emoji: "☀️", title: "Sunlight",
-    desc: "Get daylight in your eyes before you get social media in your brain. A few minutes outside early sets your whole day's rhythm." },
-  { id: "guthealth",  chem: "s", time: "midday",  emoji: "🥗", title: "Gut Health",
-    desc: "Feed your gut real food today — fruit, veg, protein, water — and go easy on the ultra-processed stuff." },
-  { id: "underthink", chem: "s", time: "evening", emoji: "🌬️", title: "Underthinking",
-    desc: "A few minutes of slow breathing to quiet a busy mind. In slowly through the nose, out even slower." },
-  { id: "deepsleep",  chem: "s", time: "evening", emoji: "😴", title: "Deep Sleep",
-    desc: "Protect tonight's sleep: a reasonable bedtime, phone out of the bedroom. Tomorrow's mood is built tonight." },
-
-  // Endorphins
-  { id: "exercise",   chem: "e", time: "midday",  emoji: "🏃", title: "Exercise",
-    desc: "Move your body in a way you could keep doing for years — walk, lift, run, swim, play. Any movement counts." },
-  { id: "heat",       chem: "e", time: "evening", emoji: "🛁", title: "Heat",
-    desc: "A hot bath, shower or sauna — let heat melt the tension of the day away from your phone." },
-  { id: "music",      chem: "e", time: "morning", emoji: "🎶", title: "Music",
-    desc: "Put on songs you love and sing along. Loudly is better. Dancing is extra credit." },
-  { id: "laughter",   chem: "e", time: "evening", emoji: "😂", title: "Laughter",
-    desc: "Find the funny side today — share a laugh with someone, or watch something that genuinely cracks you up." },
-  { id: "stretch",    chem: "e", time: "morning", emoji: "🧘", title: "Stretching",
-    desc: "Give your body the stretch it's asking for — reach up, hang, twist. One or two minutes is plenty." },
-];
 
 const byId = Object.fromEntries(ACTIONS.map(a => [a.id, a]));
 
 const DEFAULT_CHOSEN = { d: "coldwater", o: "gratitude", s: "sunlight", e: "exercise" };
 
-const PRAISE = {
-  d: ["Dopamine, earned the real way. 🎯", "That's genuine drive. Nice.", "Motivation bank: topped up."],
-  o: ["That's connection. It counts double. 💗", "Oxytocin flowing — someone felt that too.", "Warmth given is warmth kept."],
-  s: ["Serotonin says thank you. ☀️", "Mood foundations: strengthened.", "Steady energy, coming up."],
-  e: ["Endorphins unlocked. 💪", "Stress doesn't stand a chance.", "That one always pays you back."],
-};
-
-const MILESTONES = { 3: "3-day streak — a pattern is forming. 🔥", 7: "A full week! This is who you are now. 🔥",
-  14: "Two weeks strong. Remarkable. 🔥", 30: "30 days. You've rewired something. 🏆" };
+const CHEM_COLORS = { d: "var(--d)", o: "var(--o)", s: "var(--s)", e: "var(--e)" };
 
 /* ─── State ─── */
 
@@ -107,8 +40,12 @@ function dkey(d) {
 function today() { return dkey(new Date()); }
 function daysAgo(n) { const d = new Date(); d.setDate(d.getDate() - n); return d; }
 
-function todayChecks() { return state.checks[today()] || []; }
+function dayOfYear() {
+  const now = new Date();
+  return Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+}
 
+function todayChecks() { return state.checks[today()] || []; }
 function isChecked(id) { return todayChecks().includes(id); }
 
 function chemsDone(dayKey) {
@@ -120,7 +57,6 @@ function chemsDone(dayKey) {
   return done;
 }
 
-/* Chosen actions completed today, as a set of chem keys */
 function chosenDoneToday() {
   const done = new Set();
   const checks = todayChecks();
@@ -132,11 +68,10 @@ function chosenDoneToday() {
 
 function streak() {
   let n = 0;
-  // today counts if anything is checked; a quiet today doesn't break the streak yet
+  // a quiet today doesn't break the streak until the day is over
   let i = (todayChecks().length > 0) ? 0 : 1;
   for (; ; i++) {
-    const key = dkey(daysAgo(i));
-    if ((state.checks[key] || []).length > 0) n++;
+    if ((state.checks[dkey(daysAgo(i))] || []).length > 0) n++;
     else break;
     if (i > 3650) break;
   }
@@ -150,6 +85,27 @@ function fullDoseDays() {
     if (Object.values(state.chosen).every(id => checks.includes(id))) n++;
   }
   return n;
+}
+
+/* ─── Insight rotation ───
+   One bite-sized card per day, cycling through every piece of
+   learn content in the app.                                */
+
+function allBites() {
+  const out = [];
+  for (const c of Object.keys(CHEMS)) {
+    for (const b of (CHEM_INFO[c].bites || [])) out.push({ ...b, chem: c, from: "chem" });
+  }
+  for (const a of ACTIONS) {
+    for (const b of ((a.learn && a.learn.bites) || [])) out.push({ ...b, chem: a.chem, from: a.id });
+  }
+  return out;
+}
+
+function todaysInsight() {
+  const bites = allBites();
+  if (!bites.length) return null;
+  return bites[dayOfYear() % bites.length];
 }
 
 /* ─── Elements ─── */
@@ -194,8 +150,6 @@ function arcPath(cx, cy, r, a0, a1) {
   return `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
 }
 
-const CHEM_COLORS = { d: "var(--d)", o: "var(--o)", s: "var(--s)", e: "var(--e)" };
-
 function renderRing() {
   const done = chosenDoneToday();
   const order = ["d", "o", "s", "e"];
@@ -206,13 +160,14 @@ function renderRing() {
     const on = done.has(c);
     svg += `<path class="ring-seg" d="${arcPath(60, 60, 51, a0, a1)}"
       fill="none" stroke="${on ? CHEM_COLORS[c] : "var(--surface-2)"}"
-      stroke-width="10" stroke-linecap="round" opacity="${on ? 1 : 0.9}"/>`;
+      stroke-width="10" stroke-linecap="round"/>`;
   });
   $("ring").innerHTML = svg;
   $("ringCount").textContent = `${done.size}/4`;
 
   $("chemChips").innerHTML = order.map(c =>
-    `<div class="chip c-${c} ${done.has(c) ? "done" : ""}" title="${CHEMS[c].name}">${CHEMS[c].letter}</div>`
+    `<button class="chip c-${c} ${done.has(c) ? "done" : ""}" data-chem="${c}"
+      aria-label="About ${CHEMS[c].name}">${CHEMS[c].letter}</button>`
   ).join("");
 
   const lines = {
@@ -229,7 +184,7 @@ function renderNudge() {
   const el = $("nudge");
   const checks = todayChecks();
 
-  // find the chosen action with the longest drought (≥3 days, incl. today)
+  // the chosen action with the longest drought (3+ days)
   let worst = null, worstGap = 2;
   for (const c of Object.keys(CHEMS)) {
     const id = state.chosen[c];
@@ -251,6 +206,22 @@ function renderNudge() {
   }
 }
 
+function renderInsight() {
+  const el = $("insight");
+  const bite = todaysInsight();
+  if (!bite) { el.classList.add("hidden"); return; }
+  el.className = `insight card c-${bite.chem}`;
+  el.innerHTML = `
+    <div class="insight-label">
+      <span class="dot c-${bite.chem}"></span>Today's insight · ${CHEMS[bite.chem].name}
+    </div>
+    <div class="insight-title">${bite.title}</div>
+    <p class="insight-body">${bite.body}</p>
+    <button class="learn-link" data-learn="${bite.from}" data-chem="${bite.chem}">
+      ${bite.from === "chem" ? `More on ${CHEMS[bite.chem].name}` : `More on ${byId[bite.from].title}`} →
+    </button>`;
+}
+
 function renderTabs() {
   document.querySelectorAll(".tab").forEach(t => {
     t.classList.toggle("active", t.dataset.time === currentTab);
@@ -258,7 +229,6 @@ function renderTabs() {
 }
 
 function renderActions() {
-  const list = $("actionList");
   const actions = ACTIONS.filter(a => a.time === currentTab);
   // chosen first, then unchecked before checked
   actions.sort((a, b) => {
@@ -268,11 +238,11 @@ function renderActions() {
     return (isChecked(a.id) ? 1 : 0) - (isChecked(b.id) ? 1 : 0);
   });
 
-  list.innerHTML = actions.map(a => {
+  $("actionList").innerHTML = actions.map(a => {
     const chosen = Object.values(state.chosen).includes(a.id);
     const checked = isChecked(a.id);
     return `
-    <div class="action ${checked ? "checked" : ""}" data-id="${a.id}">
+    <div class="action ${checked ? "checked" : ""}">
       <button class="action-row" data-toggle="${a.id}" aria-pressed="${checked}">
         <span class="action-emoji">${a.emoji}</span>
         <span class="action-main">
@@ -284,7 +254,10 @@ function renderActions() {
         </span>
         <span class="check">✓</span>
       </button>
-      <div class="action-desc">${a.desc}</div>
+      <div class="action-desc">
+        ${a.desc}
+        ${a.learn ? `<button class="learn-link" data-learn="${a.id}">Why it works →</button>` : ""}
+      </div>
     </div>`;
   }).join("");
 }
@@ -293,6 +266,7 @@ function renderToday() {
   renderHeader();
   renderRing();
   renderNudge();
+  renderInsight();
   renderTabs();
   renderActions();
 }
@@ -316,18 +290,16 @@ function renderPatterns() {
   const tKey = today();
   $("heatmap").innerHTML = cells.map(d => {
     const key = dkey(d);
-    const future = d > now;
     const done = chemsDone(key);
     const dots = ["d", "o", "s", "e"].map(c =>
       `<span class="hm-dot c-${c} ${done.has(c) ? "on" : ""}"></span>`).join("");
-    return `<div class="hm-day ${key === tKey ? "today" : ""} ${future ? "future" : ""}"
+    return `<div class="hm-day ${key === tKey ? "today" : ""} ${d > now ? "future" : ""}"
       title="${key}">${dots}</div>`;
   }).join("");
 
   $("legend").innerHTML = ["d", "o", "s", "e"].map(c =>
     `<span><span class="dot c-${c}"></span>${CHEMS[c].name}</span>`).join("");
 
-  // last 7 days per chemical
   $("chemBars").innerHTML = ["d", "o", "s", "e"].map(c => {
     let n = 0;
     for (let i = 0; i < 7; i++) if (chemsDone(dkey(daysAgo(i))).has(c)) n++;
@@ -340,7 +312,7 @@ function renderPatterns() {
   }).join("");
 }
 
-/* ─── Interactions ─── */
+/* ─── Toast & celebration ─── */
 
 let toastTimer = null;
 function toast(msg) {
@@ -360,14 +332,16 @@ function confetti() {
   const colors = ["#ff6f5e", "#ec5fa3", "#ffb020", "#8b7cf6", "#2fb07c"];
   let html = "";
   for (let i = 0; i < 60; i++) {
-    const left = Math.random() * 100, delay = Math.random() * 0.5,
-          dur = 1.6 + Math.random() * 1.4, color = colors[i % colors.length];
-    html += `<span class="confetti" style="left:${left}%;background:${color};
-      animation-duration:${dur}s;animation-delay:${delay}s"></span>`;
+    html += `<span class="confetti" style="left:${Math.random() * 100}%;
+      background:${colors[i % colors.length]};
+      animation-duration:${1.6 + Math.random() * 1.4}s;
+      animation-delay:${Math.random() * 0.5}s"></span>`;
   }
   box.innerHTML = html;
   setTimeout(() => { box.classList.add("hidden"); box.innerHTML = ""; }, 3600);
 }
+
+/* ─── Checking off ─── */
 
 function toggleAction(id) {
   const key = today();
@@ -381,15 +355,13 @@ function toggleAction(id) {
     list.splice(idx, 1);
   } else {
     list.push(id);
-    const a = byId[id];
-    const pool = PRAISE[a.chem];
+    const pool = PRAISE[byId[id].chem];
     toast(pool[Math.floor(Math.random() * pool.length)]);
     if (navigator.vibrate) navigator.vibrate(12);
   }
   save();
 
-  const after = chosenDoneToday().size;
-  if (after === 4 && before === 3) {
+  if (chosenDoneToday().size === 4 && before === 3) {
     setTimeout(() => { toast("Full DOSE day! 🎉"); confetti(); }, 700);
   }
   const newStreak = streak();
@@ -400,17 +372,143 @@ function toggleAction(id) {
   renderToday();
 }
 
-/* ─── Settings sheet ─── */
+/* ═══════════════ Sheets ═══════════════ */
+
+function openSheet(html) {
+  $("sheetContent").innerHTML = html;
+  $("sheetBackdrop").classList.remove("hidden");
+  $("sheet").scrollTop = 0;
+}
+
+function closeSheet() { $("sheetBackdrop").classList.add("hidden"); }
+
+function sheetHead(kicker, title, color) {
+  return `
+    <div class="sheet-head">
+      <div>
+        ${kicker ? `<div class="sheet-kicker" style="color:${color}">${kicker}</div>` : ""}
+        <h2>${title}</h2>
+      </div>
+      <button class="sheet-close" data-close aria-label="Close">✕</button>
+    </div>`;
+}
+
+function pillList(title, items, cls) {
+  return `
+    <div class="pill-group">
+      <div class="pill-title">${title}</div>
+      <div class="pills">${items.map(i => `<span class="pill ${cls || ""}">${i}</span>`).join("")}</div>
+    </div>`;
+}
+
+function biteCards(bites, chem) {
+  return bites.map(b => `
+    <div class="bite c-${chem}">
+      <div class="bite-title">${b.title}</div>
+      <p class="bite-body">${b.body}</p>
+    </div>`).join("");
+}
+
+/* ── Chemical sheet ── */
+
+function openChemSheet(chem) {
+  const info = CHEM_INFO[chem], c = CHEMS[chem], color = CHEM_COLORS[chem];
+
+  if (!info.ready) {
+    openSheet(`
+      ${sheetHead(c.line, c.name, color)}
+      <p class="sheet-sub">The deeper ${c.name.toLowerCase()} material is still being added. Its five daily actions are already here and working.</p>
+      ${actionRows(chem)}`);
+    return;
+  }
+
+  openSheet(`
+    ${sheetHead(c.line, c.name, color)}
+    <div class="fact-grid">
+      <div class="fact"><div class="fact-label">What it does</div>${info.fn.map(f => `<div class="fact-item">${f}</div>`).join("")}</div>
+      <div class="fact"><div class="fact-label">How it works</div>${info.principles.map(f => `<div class="fact-item">${f}</div>`).join("")}</div>
+    </div>
+
+    <div class="fact-grid">
+      <div class="fact low"><div class="fact-label">Running low</div>${info.low.map(f => `<div class="fact-item">${f}</div>`).join("")}</div>
+      <div class="fact high"><div class="fact-label">Topped up</div>${info.high.map(f => `<div class="fact-item">${f}</div>`).join("")}</div>
+    </div>
+
+    ${pillList("What drains it", info.drains, "drain")}
+
+    <div class="section-label">Worth knowing</div>
+    ${biteCards(info.bites, chem)}
+
+    <div class="section-label">Your ${c.name.toLowerCase()} actions</div>
+    ${actionRows(chem)}`);
+}
+
+function actionRows(chem) {
+  return `<div class="mini-list">` + ACTIONS.filter(a => a.chem === chem).map(a => `
+    <button class="mini-row" data-learn="${a.id}">
+      <span class="mini-emoji">${a.emoji}</span>
+      <span class="mini-main">
+        <span class="mini-title">${a.title}</span>
+        <span class="mini-sub">${TIME_LABEL[a.time]}</span>
+      </span>
+      <span class="mini-arrow">›</span>
+    </button>`).join("") + `</div>`;
+}
+
+const TIME_LABEL = { morning: "☀️ Morning", midday: "🌤 Midday", evening: "🌙 Evening" };
+
+/* ── Action sheet ── */
+
+function openActionSheet(id) {
+  const a = byId[id], chem = CHEMS[a.chem], color = CHEM_COLORS[a.chem];
+  const L = a.learn;
+
+  let body = `
+    ${sheetHead(`${chem.name} · ${TIME_LABEL[a.time]}`, `${a.emoji} ${a.title}`, color)}
+    <p class="sheet-lead">${a.desc}</p>`;
+
+  if (L && L.bites) {
+    body += `<div class="section-label">Why it works</div>${biteCards(L.bites, a.chem)}`;
+  }
+
+  if (L && L.steps) {
+    body += `<div class="section-label">How to do it</div><div class="steps">` +
+      L.steps.map((s, i) => `
+        <div class="step">
+          <div class="step-num c-${a.chem}">${i + 1}</div>
+          <div class="step-main">
+            <div class="step-title">${s.title}</div>
+            <p class="step-body">${s.body}</p>
+          </div>
+        </div>`).join("") + `</div>`;
+  }
+
+  if (L && L.chips) body += pillList(L.chips.title, L.chips.items);
+
+  if (!L) body += `<p class="sheet-sub">More detail on this action is being added.</p>`;
+
+  const isChosen = state.chosen[a.chem] === a.id;
+  body += `
+    <div class="sheet-cta">
+      ${isChosen
+        ? `<div class="chosen-note">⭐ This is your daily ${chem.name.toLowerCase()} action.</div>`
+        : `<button class="btn-small" data-choose="${a.id}">Make this my ${chem.name.toLowerCase()} action</button>`}
+      <button class="btn-primary" data-close>Got it</button>
+    </div>`;
+
+  openSheet(body);
+}
+
+/* ── Settings sheet ── */
 
 function openSettings() {
-  const c = $("sheetContent");
-  c.innerHTML = `
-    <h2>Settings</h2>
+  openSheet(`
+    ${sheetHead("", "Settings", "")}
     <p class="sheet-sub">Your chosen action per chemical — the four that make a full DOSE day.</p>
     ${Object.keys(CHEMS).map(ch => `
       <div class="set-group">
         <div class="set-label" style="color:${CHEM_COLORS[ch]}">${CHEMS[ch].name} — ${CHEMS[ch].line}</div>
-        <select class="set-select" data-chem="${ch}">
+        <select class="set-select" data-chem-select="${ch}">
           ${ACTIONS.filter(a => a.chem === ch).map(a =>
             `<option value="${a.id}" ${state.chosen[ch] === a.id ? "selected" : ""}>${a.emoji} ${a.title}</option>`
           ).join("")}
@@ -419,35 +517,13 @@ function openSettings() {
     <div class="set-group">
       <div class="set-label">Your data</div>
       <div class="set-row-btns">
-        <button class="btn-small" id="btnExport">Export data</button>
-        <button class="btn-small" id="btnRedoOb">Re-run intro</button>
-        <button class="btn-small btn-danger" id="btnReset">Reset everything</button>
+        <button class="btn-small" data-act="export">Export data</button>
+        <button class="btn-small" data-act="redo">Re-run intro</button>
+        <button class="btn-small btn-danger" data-act="reset">Reset everything</button>
       </div>
     </div>
-    <p class="sheet-sub" style="margin-top:6px">Everything is stored only on this device. Export now and then to keep a backup.</p>`;
-
-  c.querySelectorAll(".set-select").forEach(sel => {
-    sel.addEventListener("change", () => {
-      state.chosen[sel.dataset.chem] = sel.value;
-      save();
-      renderToday();
-    });
-  });
-  c.querySelector("#btnExport").addEventListener("click", exportData);
-  c.querySelector("#btnRedoOb").addEventListener("click", () => { closeSettings(); startOnboarding(); });
-  c.querySelector("#btnReset").addEventListener("click", () => {
-    if (confirm("Delete all history and choices on this device?")) {
-      localStorage.removeItem(STORE_KEY);
-      state = load();
-      closeSettings();
-      startOnboarding();
-    }
-  });
-
-  $("sheetBackdrop").classList.remove("hidden");
+    <p class="sheet-sub">Everything is stored only on this device. Export now and then to keep a backup.</p>`);
 }
-
-function closeSettings() { $("sheetBackdrop").classList.add("hidden"); }
 
 function exportData() {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
@@ -458,16 +534,11 @@ function exportData() {
   URL.revokeObjectURL(a.href);
 }
 
-/* ─── Onboarding ─── */
+/* ═══════════════ Onboarding ═══════════════ */
 
 const OB_STEPS = ["intro", "d", "o", "s", "e"];
 let obStep = 0;
 let obChosen = { ...DEFAULT_CHOSEN };
-
-const OB_INTRO = {
-  title: "Meet your DOSE",
-  body: "Four brain chemicals shape how your day feels: Dopamine (drive), Oxytocin (connection), Serotonin (mood) and Endorphins (stress relief). Pick one small action for each — those four become your daily goal. Everything else in the app is bonus, never homework.",
-};
 
 const OB_CHEM_INTRO = {
   d: "Drive, motivation and focus. Modern life spikes it cheaply; these actions rebuild it properly. Pick the one you'll actually do:",
@@ -492,13 +563,13 @@ function renderObStep() {
   if (step === "intro") {
     c.innerHTML = `
       <div>
-        <div class="ob-kicker" style="background:linear-gradient(90deg,var(--d),var(--o),var(--s),var(--e));-webkit-background-clip:text;background-clip:text;color:transparent">DOSE Daily</div>
-        <h2>${OB_INTRO.title}</h2>
-        <p>${OB_INTRO.body}</p>
+        <div class="ob-kicker grad">DOSE Daily</div>
+        <h2>Meet your DOSE</h2>
+        <p>Four brain chemicals shape how your day feels: Dopamine (drive), Oxytocin (connection), Serotonin (mood) and Endorphins (stress relief). Pick one small action for each — those four become your daily goal. Everything else in the app is bonus, never homework.</p>
         <div class="ob-options">
           ${Object.keys(CHEMS).map(ch => `
-            <div class="ob-option" style="border-color:transparent">
-              <span class="ob-opt-emoji"><span class="tag c-${ch}" style="font-size:0.8rem;padding:4px 9px">${CHEMS[ch].letter}</span></span>
+            <div class="ob-option static">
+              <span class="tag c-${ch} big">${CHEMS[ch].letter}</span>
               <span><span class="ob-opt-title">${CHEMS[ch].name}</span>
               <div class="ob-opt-desc">${CHEMS[ch].line}</div></span>
             </div>`).join("")}
@@ -521,12 +592,6 @@ function renderObStep() {
             </button>`).join("")}
         </div>
       </div>`;
-    c.querySelectorAll("[data-pick]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        obChosen[step] = btn.dataset.pick;
-        c.querySelectorAll(".ob-option").forEach(b => b.classList.toggle("sel", b.dataset.pick === obChosen[step]));
-      });
-    });
     $("obNext").textContent = obStep === OB_STEPS.length - 1 ? "Start my first day" : "Continue";
   }
   window.scrollTo(0, 0);
@@ -541,7 +606,7 @@ function finishOnboarding() {
   renderToday();
 }
 
-/* ─── Navigation ─── */
+/* ═══════════════ Navigation ═══════════════ */
 
 function showView(name) {
   currentView = name;
@@ -553,11 +618,61 @@ function showView(name) {
   if (name === "patterns") renderPatterns();
 }
 
-/* ─── Wire up ─── */
+/* ═══════════════ Events ═══════════════ */
 
 document.addEventListener("click", e => {
-  const t = e.target.closest("[data-toggle]");
-  if (t) toggleAction(t.dataset.toggle);
+  const toggle = e.target.closest("[data-toggle]");
+  if (toggle) return toggleAction(toggle.dataset.toggle);
+
+  const learn = e.target.closest("[data-learn]");
+  if (learn) {
+    const id = learn.dataset.learn;
+    return id === "chem" ? openChemSheet(learn.dataset.chem) : openActionSheet(id);
+  }
+
+  const chem = e.target.closest("[data-chem]");
+  if (chem && chem.dataset.chem && !chem.dataset.learn) return openChemSheet(chem.dataset.chem);
+
+  const choose = e.target.closest("[data-choose]");
+  if (choose) {
+    const a = byId[choose.dataset.choose];
+    state.chosen[a.chem] = a.id;
+    save();
+    closeSheet();
+    renderToday();
+    return toast(`⭐ ${a.title} is now your ${CHEMS[a.chem].name.toLowerCase()} action.`);
+  }
+
+  if (e.target.closest("[data-close]")) return closeSheet();
+
+  const act = e.target.closest("[data-act]");
+  if (act) {
+    if (act.dataset.act === "export") return exportData();
+    if (act.dataset.act === "redo") { closeSheet(); return startOnboarding(); }
+    if (act.dataset.act === "reset" && confirm("Delete all history and choices on this device?")) {
+      localStorage.removeItem(STORE_KEY);
+      state = load();
+      closeSheet();
+      return startOnboarding();
+    }
+  }
+
+  const pick = e.target.closest("[data-pick]");
+  if (pick) {
+    const step = OB_STEPS[obStep];
+    obChosen[step] = pick.dataset.pick;
+    document.querySelectorAll(".ob-option").forEach(b =>
+      b.classList.toggle("sel", b.dataset.pick === obChosen[step]));
+  }
+});
+
+document.addEventListener("change", e => {
+  const sel = e.target.closest("[data-chem-select]");
+  if (sel) {
+    state.chosen[sel.dataset.chemSelect] = sel.value;
+    save();
+    renderToday();
+  }
 });
 
 document.querySelectorAll(".tab").forEach(tab => {
@@ -569,7 +684,9 @@ $("navPatterns").addEventListener("click", () => showView("patterns"));
 $("navSettings").addEventListener("click", openSettings);
 $("streakBadge").addEventListener("click", () => showView("patterns"));
 
-$("sheetBackdrop").addEventListener("click", e => { if (e.target === $("sheetBackdrop")) closeSettings(); });
+$("sheetBackdrop").addEventListener("click", e => {
+  if (e.target === $("sheetBackdrop")) closeSheet();
+});
 
 $("obNext").addEventListener("click", () => {
   if (obStep === OB_STEPS.length - 1) finishOnboarding();
@@ -577,7 +694,6 @@ $("obNext").addEventListener("click", () => {
 });
 $("obSkip").addEventListener("click", finishOnboarding);
 
-/* re-render when returning to the app (new day, new time of day) */
 document.addEventListener("visibilitychange", () => {
   if (!document.hidden && state.onboarded && currentView === "today") {
     currentTab = defaultTab();
@@ -585,7 +701,7 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-/* ─── Boot ─── */
+/* ═══════════════ Boot ═══════════════ */
 
 if (state.onboarded) {
   $("app").classList.remove("hidden");
