@@ -393,13 +393,16 @@ function sheetHead(kicker, title, color) {
     </div>`;
 }
 
-function pillList(title, items, cls) {
+function pillList(title, items, cls, note) {
   // sentence-length entries read better as rows than as tags
   const long = items.some(i => i.length > 30);
   const inner = long
     ? `<div class="note-list">${items.map(i => `<div class="note-item">${i}</div>`).join("")}</div>`
     : `<div class="pills">${items.map(i => `<span class="pill ${cls || ""}">${i}</span>`).join("")}</div>`;
-  return `<div class="pill-group"><div class="pill-title">${title}</div>${inner}</div>`;
+  return `<div class="pill-group">
+    <div class="pill-title">${title}</div>
+    ${note ? `<p class="group-note">${note}</p>` : ""}
+    ${inner}</div>`;
 }
 
 function biteCards(bites, chem) {
@@ -500,14 +503,16 @@ function openActionSheet(id) {
       </div>`).join("");
   }
 
-  if (L && L.list) body += pillList(L.list.title, L.list.items);
+  if (L && L.list) body += pillList(L.list.title, L.list.items, "", L.list.note);
 
   if (L && L.challenge) {
+    const c = L.challenge;
     body += `
       <div class="challenge c-${a.chem}">
         <div class="challenge-label">Challenge</div>
-        <div class="challenge-title">${L.challenge.title}</div>
-        <p class="challenge-body">${L.challenge.body}</p>
+        <div class="challenge-title">${c.title}</div>
+        <p class="challenge-body">${c.body}</p>
+        ${c.items ? `<ul class="challenge-list">${c.items.map(i => `<li>${i}</li>`).join("")}</ul>` : ""}
       </div>`;
   }
 

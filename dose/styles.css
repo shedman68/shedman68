@@ -654,6 +654,16 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
 .challenge-title { font-weight: 800; font-size: 1rem; margin-bottom: 6px; letter-spacing: -0.01em; }
 .challenge-body { font-size: 0.87rem; color: var(--text-2); line-height: 1.6; }
 
+.challenge-list { list-style: none; margin-top: 11px; }
+.challenge-list li {
+  font-size: 0.86rem; line-height: 1.5;
+  padding: 5px 0 5px 18px; position: relative;
+}
+.challenge-list li::before {
+  content: ""; position: absolute; left: 2px; top: 13px;
+  width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.4;
+}
+
 /* Mini action rows */
 
 .mini-list { display: flex; flex-direction: column; gap: 7px; }
