@@ -437,6 +437,8 @@ function openChemSheet(chem) {
 
     ${pillList("What drains it", info.drains, "drain")}
 
+    ${info.quote ? `<blockquote class="quote c-${chem}">“${info.quote}”</blockquote>` : ""}
+
     <div class="section-label">Worth knowing</div>
     ${biteCards(info.bites, chem)}
 

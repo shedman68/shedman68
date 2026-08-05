@@ -49,8 +49,31 @@ const CHEM_INFO = {
     ],
   },
 
+  o: {
+    ready: true,
+    fn: ["Relationships", "Confidence"],
+    principles: ["Requires good-quality in-person connection", "Requires positive, grateful self-talk"],
+    low: ["Lonely", "Unconfident"],
+    high: ["Connected", "Confident"],
+    drains: ["Lack of socialising", "Phones during social time", "Online comparison", "Critical self-talk"],
+    quote: "Happiness is equal to reality minus expectations.",
+    bites: [
+      { title: "The great facilitator of life",
+        body: "Oxytocin is what makes you want to bond, work alongside people and care for them. It's also the first chemical you ever ran on — it surges in your mum's brain at your birth to create the pair bond, and in yours to make you want that love right back." },
+      { title: "It flows in both directions",
+        body: "In any moment where love is given or received, both people get the rise. There is no version of this where being warm toward someone costs you something." },
+      { title: "It wants you in the room",
+        body: "Screens are a poor substitute for presence. What oxytocin responds to is good-quality, in-person connection — and a phone pulling your attention mid-conversation is enough to weaken it." },
+      { title: "Loneliness is a health issue, not a mood",
+        body: "We evolved to survive in groups, so exclusion registers as a genuine threat. Prolonged loneliness is now considered about as damaging to your health as smoking." },
+      { title: "The other half is how you talk to yourself",
+        body: "Giving and receiving love isn't only something you do with other people. An inner narrator that judges how you look, how you live and how successful you are is one of the biggest drains on oxytocin there is." },
+      { title: "Happiness = reality − expectations",
+        body: "Worth reading slowly. When reality overshoots what you expected, happiness turns up on its own. Most disappointment is an expectations problem rather than a reality problem." },
+    ],
+  },
+
   /* Awaiting book pages — the app degrades gracefully until then. */
-  o: { ready: false, bites: [] },
   s: { ready: false, bites: [] },
   e: { ready: false, bites: [] },
 };
@@ -189,21 +212,81 @@ const ACTIONS = [
   },
 
   /* ── Oxytocin ── */
-  { id: "contribution", chem: "o", time: "midday",  emoji: "🤝", title: "Contribution",
-    short: "Do one thing that supports someone else.",
-    desc: "Do one thing today that supports someone else, however small. Helping others is the fastest route to feeling connected." },
-  { id: "touch",        chem: "o", time: "evening", emoji: "🫂", title: "Touch",
+  {
+    id: "contribution", chem: "o", time: "midday", emoji: "🤝", title: "Contribution",
+    short: "Support someone other than yourself.",
+    desc: "Do one thing today that supports someone else, however small. Helping others is the fastest route back to feeling connected.",
+    learn: {
+      bites: [
+        { title: "Serving others serves you too",
+          body: "The person you help feels it, and so do you — that's the design, not a happy accident. Orienting your day toward the people you love turns out to be one of the most satisfying things you can do." },
+        { title: "You already contribute more than you credit",
+          body: "It's easy to put enormous effort into your work and your family without ever recognising it as contribution. Noticing what you already give isn't vanity — it's the part most people skip." },
+      ],
+      groups: {
+        title: "Where to contribute",
+        note: "Read through and notice which of these instinctively feels most important to you and the people around you right now. Start there.",
+        sets: [
+          { name: "Friends and family", items: ["Financial support", "Cleaning and organising", "Childcare",
+              "Emotional support", "Cooking", "Educating", "Quality time",
+              "Celebrating their wins", "Surprises"] },
+          { name: "Work", items: ["High-quality work", "A good team environment", "Taking the initiative",
+              "Being a good leader", "Solving problems", "Making an impact"] },
+          { name: "Charitable work", items: ["Volunteering at a food bank", "Donating blood"] },
+        ],
+      },
+    },
+  },
+  {
+    id: "touch", chem: "o", time: "evening", emoji: "🫂", title: "Touch",
     short: "Hug the people or pets you love.",
-    desc: "Hug the people (or pets) you love. Warm physical connection settles your whole nervous system." },
-  { id: "social",       chem: "o", time: "midday",  emoji: "☕", title: "Social Life",
-    short: "Make real contact with someone you care about.",
-    desc: "Reach out or meet up — a walk, a coffee, or just a genuine check-in message to someone you care about." },
-  { id: "gratitude",    chem: "o", time: "evening", emoji: "🙏", title: "Gratitude",
+    desc: "Hug the people (or pets) you love. Warm physical connection settles your whole nervous system.",
+    learn: {
+      bites: [
+        { title: "The original delivery method",
+          body: "Physical touch is how you first received love at all — one of the ways oxytocin was progressively built in you long before you could understand a word. It still works exactly the same way." },
+      ],
+    },
+  },
+  {
+    id: "social", chem: "o", time: "midday", emoji: "☕", title: "Social Life",
+    short: "Make real, undivided contact with someone.",
+    desc: "Reach out or meet up — a walk, a coffee, or a proper conversation with someone you care about.",
+    learn: {
+      bites: [
+        { title: "A phone on the table costs you",
+          body: "When attention gets pulled away mid-conversation, the connection never fully lands. This is the other reason to protect your evening phone fast — it isn't only about dopamine." },
+        { title: "Ask a better question",
+          body: "“How was your day?” earns you a shrug. “What did you enjoy most today?” earns you an actual conversation, and the oxytocin that comes with it." },
+      ],
+    },
+  },
+  {
+    id: "gratitude", chem: "o", time: "evening", emoji: "🙏", title: "Gratitude",
     short: "Name one thing you're grateful for.",
-    desc: "Pause for a few seconds and name one thing you're honestly grateful for today. Small and specific beats big and vague." },
-  { id: "achievements", chem: "o", time: "evening", emoji: "🏅", title: "Achievements",
+    desc: "Pause for a few seconds and name one thing you're honestly grateful for today. Small and specific beats big and vague.",
+    learn: {
+      bites: [
+        { title: "This one is aimed inward",
+          body: "Gratitude is one of the two actions the book leans on to rebuild self-belief. It works on the inner narrator, not just on your mood — which is why it belongs to oxytocin rather than serotonin." },
+        { title: "It moves the expectations side",
+          body: "If happiness is reality minus expectations, gratitude is how you take an honest look at reality instead of measuring it against a moving target." },
+      ],
+    },
+  },
+  {
+    id: "achievements", chem: "o", time: "evening", emoji: "🏅", title: "Achievements",
     short: "Celebrate a step you took today.",
-    desc: "Notice your progress. Celebrate one step you took today instead of instantly chasing the next one." },
+    desc: "Notice your progress. Celebrate one step you took today instead of instantly chasing the next one.",
+    learn: {
+      bites: [
+        { title: "Correct the ledger",
+          body: "A critical inner voice logs every failure and almost none of the wins. Deliberately noticing what you achieved is how you balance a record that's been kept unfairly." },
+        { title: "It counts double when it's someone else's",
+          body: "Recognising and celebrating another person's achievement is a contribution in its own right — and you get the same rise they do." },
+      ],
+    },
+  },
 
   /* ── Serotonin ── */
   { id: "nature",     chem: "s", time: "midday",  emoji: "🌳", title: "Nature",
