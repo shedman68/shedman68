@@ -74,20 +74,30 @@ const CHEM_INFO = {
   },
 
   s: {
-    ready: false, /* summary page still to come — partial content renders fine */
-    principles: ["90% of it is created in your gut", "The happier your body, the happier your mind"],
+    ready: true,
+    fn: ["Mood", "Energy"],
+    principles: ["90–95% is created in your gut", "The happier your body, the happier your mind"],
+    low: ["Anxious", "Tired"],
+    high: ["Good mood", "Energetic"],
+    drains: ["Unhealthy food", "Lack of sleep", "Lack of nature", "Lack of sunlight"],
     quote: "The happier your body, the happier your mind.",
     bites: [
       { title: "It isn't really a brain chemical",
-        body: "Around 90% of your serotonin is produced in your gut, not your head — which sets it apart from the other three entirely. How you feed and treat your body is not a side issue here. It's the main mechanism." },
-      { title: "Your body talks to your mood",
-        body: "The serotonin made in your gut directly affects mood, energy, emotions and how your nervous system behaves. Caring for your body and caring for your mental state turn out to be the same job." },
+        body: "Between 90 and 95% of your serotonin is produced in your gut, not your head — which sets it apart from the other three entirely. How you feed and treat your body isn't a side issue here. It's the main mechanism." },
+      { title: "Mood and energy are the same dial",
+        body: "These are the two functions to associate with serotonin, and watching them together makes the link obvious: when your energy is on the floor, holding a calm, positive mood is close to impossible. A surprising amount of low mood is really a tiredness problem." },
+      { title: "The vagus nerve is the line between them",
+        body: "Eleven of your twelve cranial nerves run upward into the brain. One runs down — through your throat, your chest, into your abdomen. It's the vagus, from the Latin for “wandering”, and it carries a constant report on your heart rate, breathing, digestion, mood and energy. “Mental health” sounds like a head thing. Your body is filing reports all day." },
       { title: "Emotion means energy in motion",
         body: "That's literally what the word means. Difficult feelings — sadness, worry, low mood — are movement, not malfunction. They've arrived for a reason and they're carrying information." },
+      { title: "Your feelings are feedback",
+        body: "Your body's whole aim is to keep you alive. Healthy behaviour is rewarded with a good feeling so you repeat it; unhealthy behaviour produces a bad one to get you to stop. Emotions aren't obstacles to route around — they're messages about how you're living." },
       { title: "Distraction makes it worse",
         body: "The instinct when something uncomfortable surfaces is to reach for sugar or a scroll. Those are quick-dopamine behaviours, and they don't settle the feeling — they compound it." },
       { title: "That's why we call them gut feelings",
         body: "Look closely at a difficult emotion and you'll often notice it feels like it's coming from your body rather than your head. It is." },
+      { title: "What serotonin actually wants",
+        body: "Your ancestors woke to bright natural light, spent their days outdoors, ate unprocessed food, drank fresh water and slept in real darkness. That's the life this chemical was built for — and a fairly precise list of what's missing from a modern day." },
     ],
   },
 
@@ -412,21 +422,69 @@ const ACTIONS = [
   },
 
   /* ── Serotonin ── */
-  { id: "nature",     chem: "s", time: "midday",  emoji: "🌳", title: "Nature",
-    short: "Get into green or blue space and take it in.",
-    desc: "Get to some green or blue space and actually take it in — look, listen, breathe. A park bench counts." },
-  { id: "sunlight",   chem: "s", time: "morning", emoji: "☀️", title: "Sunlight",
+  {
+    id: "nature", chem: "s", time: "midday", emoji: "🌳", title: "Nature",
+    short: "Get into green space and take it in.",
+    desc: "Get to some green or blue space and actually take it in — look, listen, breathe. A park bench counts.",
+    learn: {
+      bites: [
+        { title: "300,000 years of practice",
+          body: "Your neurobiology was shaped over roughly 300,000 years of moving through the natural world. It expects close contact with nature and a great deal of daylight — and modern life has quietly relocated almost all of it indoors." },
+        { title: "One of the four causes",
+          body: "Lack of time in nature is named as one of the four direct causes of low serotonin, alongside poor food, poor sleep and too little sunlight. It isn't a nice-to-have on the list." },
+      ],
+    },
+  },
+  {
+    id: "sunlight", chem: "s", time: "morning", emoji: "☀️", title: "Sunlight",
     short: "See daylight before you see a screen.",
-    desc: "Get daylight in your eyes before you get social media in your brain. A few minutes outside early sets your whole day's rhythm." },
-  { id: "guthealth",  chem: "s", time: "midday",  emoji: "🥗", title: "Gut Health",
+    desc: "Get daylight in your eyes before you get social media in your brain. A few minutes outside early sets your whole day's rhythm.",
+    learn: {
+      bites: [
+        { title: "Any daylight counts",
+          body: "You don't need a forest or a clear blue sky. Any exposure to daylight, in nature or not, is genuinely beneficial for your serotonin. The bar is far lower than people assume." },
+        { title: "It follows the nature problem",
+          body: "Lack of sunlight is largely downstream of spending your days indoors. Fix the time-outside problem and this one mostly fixes itself." },
+      ],
+    },
+  },
+  {
+    id: "guthealth", chem: "s", time: "midday", emoji: "🥗", title: "Gut Health",
     short: "Feed your gut real food today.",
-    desc: "Feed your gut real food today — fruit, veg, protein, water — and go easy on the ultra-processed stuff." },
-  { id: "underthink", chem: "s", time: "evening", emoji: "🌬️", title: "Underthinking",
+    desc: "Feed your gut real food today — fruit, veg, protein, water — and go easy on the ultra-processed stuff.",
+    learn: {
+      bites: [
+        { title: "Your gut has priorities",
+          body: "Send it nutritious food and it gets straight on with making serotonin. Send it sugary, fatty, processed food and it spends its energy trying to clear that out of your body instead — and serotonin drops to the bottom of the list." },
+        { title: "The spike and the dip",
+          body: "Unhealthy food gives you a sugar-driven dopamine spike that genuinely feels great for a moment. Then digestion brings a dip in mood and energy, and with it the craving for another hit. That loop is a mechanism, not a character flaw." },
+      ],
+    },
+  },
+  {
+    id: "underthink", chem: "s", time: "evening", emoji: "🌬️", title: "Underthinking",
     short: "Breathe slowly and quiet a busy mind.",
-    desc: "A few minutes of slow breathing to quiet a busy mind. In slowly through the nose, out even slower." },
-  { id: "deepsleep",  chem: "s", time: "evening", emoji: "😴", title: "Deep Sleep",
+    desc: "A few minutes of slow breathing to quiet a busy mind. In slowly through the nose, out even slower.",
+    learn: {
+      bites: [
+        { title: "Listening beats overriding",
+          body: "The aim isn't to argue your feelings away. It's to get quiet enough to hear what they're telling you about how you're living — and then to move your behaviour toward it." },
+      ],
+    },
+  },
+  {
+    id: "deepsleep", chem: "s", time: "evening", emoji: "😴", title: "Deep Sleep",
     short: "Protect tonight's sleep.",
-    desc: "Protect tonight's sleep: a reasonable bedtime, phone out of the bedroom. Tomorrow's mood is built tonight." },
+    desc: "Protect tonight's sleep: a reasonable bedtime, phone out of the bedroom. Tomorrow's mood is built tonight.",
+    learn: {
+      bites: [
+        { title: "Technology is the modern sleep thief",
+          body: "Demanding work plus a real attachment to our phones: late nights scrolling, checking in the small hours, reaching for it the second we wake. Each of those creates genuine problems for your neurobiology." },
+        { title: "Anxious and tired travel together",
+          body: "The two signs of low serotonin are anxiousness and tiredness — and sleep sits underneath both. It's rarely the most exciting action on the list, and it's often the one doing the most work." },
+      ],
+    },
+  },
 
   /* ── Endorphins ── */
   { id: "exercise",   chem: "e", time: "midday",  emoji: "🏃", title: "Exercise",
