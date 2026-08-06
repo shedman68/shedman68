@@ -73,8 +73,25 @@ const CHEM_INFO = {
     ],
   },
 
+  s: {
+    ready: false, /* summary page still to come — partial content renders fine */
+    principles: ["90% of it is created in your gut", "The happier your body, the happier your mind"],
+    quote: "The happier your body, the happier your mind.",
+    bites: [
+      { title: "It isn't really a brain chemical",
+        body: "Around 90% of your serotonin is produced in your gut, not your head — which sets it apart from the other three entirely. How you feed and treat your body is not a side issue here. It's the main mechanism." },
+      { title: "Your body talks to your mood",
+        body: "The serotonin made in your gut directly affects mood, energy, emotions and how your nervous system behaves. Caring for your body and caring for your mental state turn out to be the same job." },
+      { title: "Emotion means energy in motion",
+        body: "That's literally what the word means. Difficult feelings — sadness, worry, low mood — are movement, not malfunction. They've arrived for a reason and they're carrying information." },
+      { title: "Distraction makes it worse",
+        body: "The instinct when something uncomfortable surfaces is to reach for sugar or a scroll. Those are quick-dopamine behaviours, and they don't settle the feeling — they compound it." },
+      { title: "That's why we call them gut feelings",
+        body: "Look closely at a difficult emotion and you'll often notice it feels like it's coming from your body rather than your head. It is." },
+    ],
+  },
+
   /* Awaiting book pages — the app degrades gracefully until then. */
-  s: { ready: false, bites: [] },
   e: { ready: false, bites: [] },
 };
 
@@ -214,7 +231,7 @@ const ACTIONS = [
   /* ── Oxytocin ── */
   {
     id: "contribution", chem: "o", time: "midday", emoji: "🤝", title: "Contribution",
-    short: "Support someone other than yourself.",
+    short: "Keep serving others at the front of your mind.",
     desc: "Do one thing today that supports someone else, however small. Helping others is the fastest route back to feeling connected.",
     learn: {
       bites: [
@@ -252,7 +269,7 @@ const ACTIONS = [
   },
   {
     id: "touch", chem: "o", time: "evening", emoji: "🫂", title: "Touch",
-    short: "Hug the people or pets you love.",
+    short: "Increase the physical connection in your life.",
     desc: "Hug the people (or pets) you love. Warm physical connection settles your whole nervous system.",
     learn: {
       bites: [
@@ -263,7 +280,7 @@ const ACTIONS = [
   },
   {
     id: "social", chem: "o", time: "midday", emoji: "☕", title: "Social Life",
-    short: "Make real, undivided contact with someone.",
+    short: "Make time to connect deeply with those you love.",
     desc: "Reach out or meet up — a walk, a coffee, or a proper conversation with someone you care about.",
     learn: {
       bites: [
@@ -290,7 +307,7 @@ const ACTIONS = [
   },
   {
     id: "gratitude", chem: "o", time: "evening", emoji: "🙏", title: "Gratitude",
-    short: "Notice what's good — and say thank you.",
+    short: "Immerse your mind in the joy of your experiences.",
     desc: "Two halves: feeling grateful for what you already have, and telling someone out loud that you're grateful for them.",
     learn: {
       bites: [
@@ -347,7 +364,7 @@ const ACTIONS = [
   },
   {
     id: "achievements", chem: "o", time: "evening", emoji: "🏅", title: "Achievements",
-    short: "Celebrate a step you took today.",
+    short: "Celebrate the effort and progress you're making.",
     desc: "Notice your progress out loud. Celebrate one step you took today instead of instantly chasing the next one.",
     learn: {
       bites: [
@@ -361,14 +378,36 @@ const ACTIONS = [
           body: "Neuroplasticity is your brain reorganising itself through experience. Brush your teeth with the wrong hand for a month and it becomes normal; keep going three months and the original hand feels strange. Your inner voice works exactly the same way." },
         { title: "It spills outward",
           body: "The oxytocin from recognising achievements is linked to sharing positive emotions, trusting people more, cooperating better and stronger group cohesion. Celebrating yourself quietly makes you better company." },
+        { title: "It pays you twice",
+          body: "Noticing progress toward your pursuit doesn't only build oxytocin — it builds dopamine as well, raising the motivation to keep striving for the thing you're actually after." },
+        { title: "Self-talk works like a see-saw",
+          body: "When you catch negative self-talk starting up, go back to your achievements and remind yourself what you've done recently. If the see-saw has tipped one way, something has to actively push it back." },
       ],
       steps: [
         { title: "Mornings",
-          body: "Pair it with your gratitude question. Straight after asking what you're most grateful for, ask yourself what you've most recently achieved. Best done on the same phone-free morning walk." },
-        { title: "The end of the working day",
-          body: "The second natural moment. After anything intense it's easy to spend the evening with your mind listing what you didn't finish. Name the progress you did make instead." },
+          body: "Pair it with your gratitude practice: ask the gratitude question first, then the achievements one. It works while you're making the bed or brushing your teeth, but it's far better on a phone-free morning walk." },
+        { title: "As you finish work",
+          body: "Working lives run on never-ending task lists, and it's easy to graft all day and still hear a voice listing what you didn't get done. On your way out, take a few minutes to credit yourself for the progress you actually made." },
       ],
+      prompt: {
+        label: "Your daily achievements question",
+        question: "In this moment right now, what is the number one achievement I feel most proud of?",
+        follow: "It doesn't need to be anything huge — just something telling you your life is heading in a good direction. Then celebrate it the way a loving parent would: “Well done.” “It's great you've kept at this.” “Here's what it's done for me…” Do that consistently and you stop cataloguing where you fall short and start noticing that you're making progress. Progress breeds progress.",
+      },
       quote: "Create a new voice in your mind. One that celebrates you.",
+      list: {
+        title: "Examples of daily achievements",
+        items: ["Time spent away from your phone", "Focusing better while working",
+                "Reading more", "Connecting with family and friends",
+                "Doing something kind for someone", "More physical touch in your life",
+                "Being more grateful each day", "Talking about your appearance more kindly",
+                "Time in natural environments", "Exercising more regularly",
+                "Eating and drinking better", "Keeping a more organised home"],
+      },
+      challenge: {
+        title: "The 7-day Achievements Challenge",
+        body: "Ask yourself the daily achievements question once every morning and once after work, every day for the next seven days. Keep your capacity to notice and celebrate other people's achievements at the front of your mind too.",
+      },
     },
   },
 

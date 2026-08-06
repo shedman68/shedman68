@@ -418,33 +418,22 @@ function biteCards(bites, chem) {
 function openChemSheet(chem) {
   const info = CHEM_INFO[chem], c = CHEMS[chem], color = CHEM_COLORS[chem];
 
-  if (!info.ready) {
-    openSheet(`
-      ${sheetHead(c.line, c.name, color)}
-      <p class="sheet-sub">The deeper ${c.name.toLowerCase()} material is still being added. Its five daily actions are already here and working.</p>
-      ${actionRows(chem)}`);
-    return;
-  }
+  const facts = (a, b) => (a || b) ? `<div class="fact-grid">${a || ""}${b || ""}</div>` : "";
+  const fact = (label, items, cls) => items
+    ? `<div class="fact ${cls || ""}"><div class="fact-label">${label}</div>${
+        items.map(f => `<div class="fact-item">${f}</div>`).join("")}</div>`
+    : "";
+
+  const bites = info.bites || [];
 
   openSheet(`
     ${sheetHead(c.line, c.name, color)}
-    <div class="fact-grid">
-      <div class="fact"><div class="fact-label">What it does</div>${info.fn.map(f => `<div class="fact-item">${f}</div>`).join("")}</div>
-      <div class="fact"><div class="fact-label">How it works</div>${info.principles.map(f => `<div class="fact-item">${f}</div>`).join("")}</div>
-    </div>
-
-    <div class="fact-grid">
-      <div class="fact low"><div class="fact-label">Running low</div>${info.low.map(f => `<div class="fact-item">${f}</div>`).join("")}</div>
-      <div class="fact high"><div class="fact-label">Topped up</div>${info.high.map(f => `<div class="fact-item">${f}</div>`).join("")}</div>
-    </div>
-
-    ${pillList("What drains it", info.drains, "drain")}
-
+    ${facts(fact("What it does", info.fn), fact("How it works", info.principles))}
+    ${facts(fact("Running low", info.low, "low"), fact("Topped up", info.high, "high"))}
+    ${info.drains ? pillList("What drains it", info.drains, "drain") : ""}
     ${info.quote ? `<blockquote class="quote c-${chem}">“${info.quote}”</blockquote>` : ""}
-
-    <div class="section-label">Worth knowing</div>
-    ${biteCards(info.bites, chem)}
-
+    ${bites.length ? `<div class="section-label">Worth knowing</div>${biteCards(bites, chem)}` : ""}
+    ${!info.ready ? `<p class="sheet-sub">More ${c.name.toLowerCase()} material is still being added.</p>` : ""}
     <div class="section-label">Your ${c.name.toLowerCase()} actions</div>
     ${actionRows(chem)}`);
 }
