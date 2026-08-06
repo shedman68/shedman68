@@ -101,8 +101,21 @@ const CHEM_INFO = {
     ],
   },
 
-  /* Awaiting book pages — the app degrades gracefully until then. */
-  e: { ready: false, bites: [] },
+  e: {
+    ready: false, /* summary page still to come — partial content renders fine */
+    principles: ["They require hard physical exertion", "A natural brain and body de-stresser"],
+    quote: "Feeling stressed? Ah — I must boost my endorphins.",
+    bites: [
+      { title: "Built for outrunning predators",
+        body: "Your ancestors needed to keep moving through pain when something was chasing them, and endorphins are what made that possible. Nothing is hunting you now — but the stress still arrives, and the same system still clears it." },
+      { title: "This one wants real exertion",
+        body: "Endorphins can't be talked into existence. You have to physically push your body in some way. The “runner's high” is exactly this: a significant endorphin lift arising from what the body is being put through." },
+      { title: "Your built-in de-stresser",
+        body: "The simplest way to hold onto this: when you notice you're stressed, the thought shouldn't be “I need to calm down.” It should be “I need to boost my endorphins.”" },
+      { title: "Exercise is only one of five",
+        body: "Pushing your body doesn't have to mean the gym. Heat, music, laughter and stretching all reach the same place — which matters a great deal if injury, disability or circumstance puts exercise out of reach." },
+    ],
+  },
 };
 
 /* ─── The 20 actions, five per chemical ───
@@ -424,7 +437,7 @@ const ACTIONS = [
   /* ── Serotonin ── */
   {
     id: "nature", chem: "s", time: "midday", emoji: "🌳", title: "Nature",
-    short: "Get into green space and take it in.",
+    short: "Connect with the natural world, headphone free.",
     desc: "Get to some green or blue space and actually take it in — look, listen, breathe. A park bench counts.",
     learn: {
       bites: [
@@ -462,7 +475,7 @@ const ACTIONS = [
   },
   {
     id: "sunlight", chem: "s", time: "morning", emoji: "☀️", title: "Sunlight",
-    short: "See daylight before you see a screen.",
+    short: "View sunlight as soon as possible after waking.",
     desc: "Get daylight in your eyes before you get social media in your brain. A few minutes outside early sets your whole day's rhythm.",
     learn: {
       bites: [
@@ -490,7 +503,7 @@ const ACTIONS = [
   },
   {
     id: "guthealth", chem: "s", time: "midday", emoji: "🥗", title: "Gut Health",
-    short: "Feed your gut real food today.",
+    short: "Swap processed food for whole food.",
     desc: "Feed your gut real food today — fruit, veg, protein, water — and go easy on the ultra-processed stuff.",
     learn: {
       bites: [
@@ -545,7 +558,7 @@ const ACTIONS = [
   },
   {
     id: "underthink", chem: "s", time: "evening", emoji: "🌬️", title: "Underthinking",
-    short: "Breathe slowly and quiet a busy mind.",
+    short: "Calm your body to calm your thinking.",
     desc: "Resonance breathing — six slow breaths a minute — to settle your nervous system and quieten an overactive mind.",
     learn: {
       bites: [
@@ -555,26 +568,50 @@ const ACTIONS = [
           body: "Longer out than in is the entire mechanism. Extending the out-breath is what tells your body the emergency is over." },
         { title: "Train it before you need it",
           body: "This works in an acute moment of worry, but it works far better if you've practised. Treat it like a muscle in the gym — a few minutes each morning and you'll settle yourself far more efficiently when the overthinking actually arrives." },
+        { title: "Children already know this one",
+          body: "Watch a child settle after being upset and you'll see it: a double breath in, then a long breath out. That's the physiological sigh, and nobody taught it to them — the body reaches for it to calm its own nervous system." },
         { title: "Listening beats overriding",
           body: "The aim isn't to argue your feelings away. It's to get quiet enough to hear what they're telling you about how you're living — and then to move your behaviour toward it." },
       ],
       steps: [
-        { title: "Sit comfortably and upright",
-          body: "A sofa or chair is fine. Close your eyes and start breathing in through your nose and out through your mouth until you feel settled." },
-        { title: "Four seconds in, six seconds out",
-          body: "Ten-second cycles give you exactly six breaths a minute. Keep the exhale longer than the inhale — that's the part that calms you." },
-        { title: "Stay with it for a few minutes",
-          body: "Use the same pattern lying in bed, and again if you wake in the night and need to bring your mind back down." },
+        { title: "Three breaths, then close your eyes",
+          body: "Sit down and take three full inhales and exhales. Close your eyes on the third exhale, then take three more." },
+        { title: "Choose your breathing",
+          body: "Resonance breathing or sigh breathing — whichever of the two genuinely calms you more. Breathe that way for two to three minutes." },
+        { title: "Scan your body head to toe",
+          body: "Start at your head: any sensations in your eyes, nose or mouth? Then your throat, shoulders, chest and stomach. Then your thighs, and down to your feet. You're learning to feel your body, not fix it." },
+        { title: "Open your eyes",
+          body: "The whole practice takes under five minutes, and your brain comes out of it calmer, clearer and more focused. Done each morning, it compounds." },
       ],
-      challenge: {
-        title: "The morning breathing habit",
-        body: "Practise resonance breathing for a few minutes every morning. Find a calming spot at home, or a good bench on a walk, sit down, and train it.",
-      },
+      quote: "Becoming an underthinker is possible, starting from today.",
+      list: [
+        {
+          title: "Two breathing patterns",
+          items: ["Resonance breathing — in through the nose for four seconds, out through the mouth for six. Ten-second cycles, six breaths a minute.",
+                  "Sigh breathing — a deep breath in through the nose, then a short sharp top-up breath in, then a long sigh out through the mouth. Double inhale, big exhale."],
+        },
+        {
+          title: "When you're already overthinking",
+          items: ["Breathe first — calm the body before you try to sort out the thought.",
+                  "Vocalise it — call, voice-note or meet someone you trust and describe what's happening. Explaining it is what processes and rationalises it. Journalling does the same job on paper.",
+                  "Turn to gratitude — overthinking pulls your brain toward fear. Gratitude reminds it what's actually fine, and that's the reassurance it needs to settle."],
+        },
+      ],
+      challenge: [
+        {
+          title: "Ten sigh breaths, now",
+          body: "Sit comfortably, close your eyes and take a few normal breaths. Then perform ten sigh breaths — double inhale, then a long exhale. The bigger and louder the exhale, the better.",
+        },
+        {
+          title: "The morning calming practice",
+          body: "Run the full practice each morning for the next week. Find a calming spot at home, or a good bench on a walk, and treat it like training a muscle.",
+        },
+      ],
     },
   },
   {
     id: "deepsleep", chem: "s", time: "evening", emoji: "😴", title: "Deep Sleep",
-    short: "Protect tonight's sleep.",
+    short: "Optimise your sleep to optimise your wellbeing.",
     desc: "Protect tonight's sleep: a reasonable bedtime, phone out of the bedroom. Tomorrow's mood is built tonight.",
     learn: {
       bites: [
