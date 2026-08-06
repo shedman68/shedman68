@@ -56,6 +56,25 @@ Serve locally with `python3 -m http.server` and open `localhost:8000`.
 
 ## Roadmap
 
+### Next
+
 - [ ] Push notification nudges (installed iOS PWAs support these on iOS 16.4+)
 - [ ] Calendar export for routines
 - [ ] Custom/user-defined actions
+- [ ] Resist counter for the quick-dopamine habit ("a rep in the gym for your brain")
+- [ ] Built-in stopwatch for the Flow State challenge, storing your daily best
+
+### Direction
+
+The checklist is the surface, not the point. Once there is enough history to
+learn from, the app should help you *lean into* what you're drawn to:
+
+- Surface what you do a lot of, what you clearly enjoy, and what you keep
+  skipping — then ask **why**. Is it a weakness worth working on, or simply
+  not for you? Both are useful answers.
+- Let themes and actions you gravitate toward take up more room over time,
+  rather than treating all twenty actions as equal forever.
+- Connect the daily practice to a larger philosophy of meaning and personal
+  energy drives — helping people find what actually powers their life.
+
+Feedback loop: dogfood first, then a small group of friends, then iterate.

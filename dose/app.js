@@ -489,6 +489,17 @@ function openActionSheet(id) {
         </div>`).join("") + `</div>`;
   }
 
+  if (L && L.prompt) {
+    const p = L.prompt;
+    body += `
+      <div class="prompt c-${a.chem}">
+        <div class="prompt-label">${p.label}</div>
+        <div class="prompt-q">“${p.question}”</div>
+        ${p.examples ? `<ul class="prompt-examples">${p.examples.map(i => `<li>${i}</li>`).join("")}</ul>` : ""}
+        ${p.follow ? `<p class="prompt-follow">${p.follow}</p>` : ""}
+      </div>`;
+  }
+
   if (L && L.quote) {
     body += `<blockquote class="quote c-${a.chem}">“${L.quote}”</blockquote>`;
   }
@@ -503,7 +514,10 @@ function openActionSheet(id) {
       </div>`).join("");
   }
 
-  if (L && L.list) body += pillList(L.list.title, L.list.items, "", L.list.note);
+  if (L && L.list) {
+    const lists = Array.isArray(L.list) ? L.list : [L.list];
+    body += lists.map(l => pillList(l.title, l.items, "", l.note)).join("");
+  }
 
   if (L && L.challenge) {
     const c = L.challenge;

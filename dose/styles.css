@@ -628,6 +628,36 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
 .group-name.c-d { color: var(--d); } .group-name.c-o { color: var(--o); }
 .group-name.c-s { color: var(--s); } .group-name.c-e { color: var(--e); }
 
+/* Daily question prompt */
+
+.prompt {
+  margin-top: 22px;
+  padding: 17px 18px;
+  border-radius: 16px;
+  background: var(--surface-2);
+}
+.prompt-label {
+  font-size: 0.66rem; font-weight: 800; letter-spacing: 0.14em;
+  text-transform: uppercase; margin-bottom: 9px;
+}
+.prompt.c-d .prompt-label { color: var(--d); }
+.prompt.c-o .prompt-label { color: var(--o); }
+.prompt.c-s .prompt-label { color: var(--s); }
+.prompt.c-e .prompt-label { color: var(--e); }
+
+.prompt-q {
+  font-size: 1.05rem; font-weight: 700; line-height: 1.4;
+  letter-spacing: -0.01em; margin-bottom: 12px;
+}
+
+.prompt-examples { list-style: none; margin-bottom: 12px; }
+.prompt-examples li {
+  font-size: 0.84rem; color: var(--text-2); font-style: italic;
+  line-height: 1.5; padding: 3px 0;
+}
+
+.prompt-follow { font-size: 0.85rem; color: var(--text-2); line-height: 1.6; }
+
 /* Challenge callout */
 
 .challenge {
