@@ -658,6 +658,19 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
 
 .prompt-follow { font-size: 0.85rem; color: var(--text-2); line-height: 1.6; }
 
+/* Caution note */
+
+.caution {
+  margin-top: 20px;
+  padding: 13px 16px;
+  border-radius: 14px;
+  background: var(--surface-2);
+  border-left: 3px solid var(--text-2);
+  font-size: 0.83rem;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+
 /* Challenge callout */
 
 .challenge {

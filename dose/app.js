@@ -508,15 +508,19 @@ function openActionSheet(id) {
     body += lists.map(l => pillList(l.title, l.items, "", l.note)).join("");
   }
 
+  if (L && L.caution) {
+    body += `<div class="caution">${L.caution}</div>`;
+  }
+
   if (L && L.challenge) {
-    const c = L.challenge;
-    body += `
+    const list = Array.isArray(L.challenge) ? L.challenge : [L.challenge];
+    body += list.map(c => `
       <div class="challenge c-${a.chem}">
         <div class="challenge-label">Challenge</div>
         <div class="challenge-title">${c.title}</div>
         <p class="challenge-body">${c.body}</p>
         ${c.items ? `<ul class="challenge-list">${c.items.map(i => `<li>${i}</li>`).join("")}</ul>` : ""}
-      </div>`;
+      </div>`).join("");
   }
 
   if (!L) body += `<p class="sheet-sub">More detail on this action is being added.</p>`;
