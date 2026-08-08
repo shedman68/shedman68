@@ -698,6 +698,28 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
   padding: 4px 0;
 }
 
+/* Reflection question */
+
+.reflect {
+  margin-top: 24px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: var(--surface-2);
+  border-left: 3px solid var(--line);
+}
+.reflect.c-d { border-left-color: var(--d); }
+.reflect.c-o { border-left-color: var(--o); }
+.reflect.c-s { border-left-color: var(--s); }
+.reflect.c-e { border-left-color: var(--e); }
+
+.reflect-label {
+  font-size: 0.66rem; font-weight: 800; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--text-2); margin-bottom: 7px;
+}
+.reflect-body {
+  font-size: 0.92rem; line-height: 1.6; font-style: italic;
+}
+
 /* Caution note */
 
 .caution {

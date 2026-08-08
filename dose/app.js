@@ -478,6 +478,14 @@ const FIGURES = {
     <g opacity=".4">
       <path d="M86 52 V86"/><path d="M82 80 L86 87 L90 80"/>
     </g>`,
+  /* hanging from a bar, feet clear of the floor */
+  hang: `
+    <path d="M22 22 H78"/>
+    <circle cx="50" cy="46" r="7"/>
+    <path d="M38 24 V40"/><path d="M62 24 V40"/>
+    <path d="M38 40 L46 52"/><path d="M62 40 L54 52"/>
+    <path d="M50 53 V78"/>
+    <path d="M50 78 L43 96 L47 106"/><path d="M50 78 L57 96 L53 106"/>`,
   /* front view, arms swung across the body */
   twist: `
     <circle cx="50" cy="26" r="7"/>
@@ -520,7 +528,7 @@ function openActionSheet(id) {
   }
 
   if (L && L.steps) {
-    body += `<div class="section-label">How to do it</div><div class="steps">` +
+    body += `<div class="section-label">${L.stepsTitle || "How to do it"}</div><div class="steps">` +
       L.steps.map((s, i) => `
         <div class="step">
           <div class="step-num c-${a.chem}">${i + 1}</div>
@@ -532,16 +540,17 @@ function openActionSheet(id) {
   }
 
   if (L && L.movements) {
-    const M = L.movements;
-    body += `<div class="section-label">${M.title}</div>`;
-    if (M.note) body += `<p class="group-note">${M.note}</p>`;
-    body += M.items.map(m => movementBlock(m, a.chem)).join("");
-    if (M.cadence) {
-      body += `<div class="cadence">${M.cadence.map(c => `
-        <div class="cadence-col">
-          <div class="cadence-label c-${a.chem}">${c.label}</div>
-          ${c.lines.map(l => `<div class="cadence-line">${l}</div>`).join("")}
-        </div>`).join("")}</div>`;
+    for (const M of (Array.isArray(L.movements) ? L.movements : [L.movements])) {
+      body += `<div class="section-label">${M.title}</div>`;
+      if (M.note) body += `<p class="group-note">${M.note}</p>`;
+      body += M.items.map(m => movementBlock(m, a.chem)).join("");
+      if (M.cadence) {
+        body += `<div class="cadence">${M.cadence.map(c => `
+          <div class="cadence-col">
+            <div class="cadence-label c-${a.chem}">${c.label}</div>
+            ${c.lines.map(l => `<div class="cadence-line">${l}</div>`).join("")}
+          </div>`).join("")}</div>`;
+      }
     }
   }
 
@@ -593,6 +602,15 @@ function openActionSheet(id) {
   if (!L) body += `<p class="sheet-sub">More detail on this action is being added.</p>`;
 
   const isChosen = state.chosen[a.chem] === a.id;
+
+  if (REFLECT[a.id]) {
+    body += `
+      <div class="reflect c-${a.chem}">
+        <div class="reflect-label">Is this your one?</div>
+        <p class="reflect-body">${REFLECT[a.id]}</p>
+      </div>`;
+  }
+
   body += `
     <div class="sheet-cta">
       ${isChosen
@@ -646,10 +664,10 @@ let obStep = 0;
 let obChosen = { ...DEFAULT_CHOSEN };
 
 const OB_CHEM_INTRO = {
-  d: "Drive, motivation and focus. Modern life spikes it cheaply; these actions rebuild it properly. Pick the one you'll actually do:",
-  o: "Connection, warmth and belonging. It grows when you give it away. Pick your daily go-to:",
-  s: "Steady mood and calm energy, built through light, food, sleep and nature. Pick yours:",
-  e: "Your built-in stress release. Movement, heat, music, laughter. Pick your favourite:",
+  d: "The chemical creating your drive. It controls how motivated you feel and your capacity to stay focused on your goals — built naturally by completing challenging things, and spiked then crashed by everything quick the modern world offers. Pick the one you'll actually do:",
+  o: "The chemical that gives our purpose a scientific shape: love for yourself and the people around you. It's built through service to others and service to yourself. Pick the one that would change most:",
+  s: "The natural chemical. It wants you to eat real food, sleep deeply, and breathe in the outdoors — and it's built mostly in your gut. Pick the one that would shift your mood and energy most:",
+  e: "Your body's built-in stress release, and the one chemical that asks for real physical exertion. Movement, heat, music, laughter, stretching. Pick your favourite:",
 };
 
 function startOnboarding() {

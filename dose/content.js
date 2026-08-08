@@ -655,7 +655,7 @@ const ACTIONS = [
   /* ── Endorphins ── */
   {
     id: "exercise", chem: "e", time: "midday", emoji: "🏃", title: "Exercise",
-    short: "Move your body in a way you enjoy.",
+    short: "Find your favourite way to get moving.",
     desc: "Move your body in a way you could keep doing for years — walk, lift, run, swim, play. Any movement counts.",
     learn: {
       bites: [
@@ -681,17 +681,17 @@ const ACTIONS = [
     },
   },
   { id: "heat",       chem: "e", time: "evening", emoji: "🛁", title: "Heat",
-    short: "Let heat melt the day's tension.",
+    short: "Immerse yourself in saunas or hot baths.",
     desc: "A hot bath, shower or sauna — let heat melt the tension of the day away from your phone." },
   { id: "music",      chem: "e", time: "morning", emoji: "🎶", title: "Music",
-    short: "Play songs you love and sing along.",
+    short: "Sing and dance daily, especially mornings.",
     desc: "Put on songs you love and sing along. Loudly is better. Dancing is extra credit." },
   { id: "laughter",   chem: "e", time: "evening", emoji: "😂", title: "Laughter",
-    short: "Find the funny side today.",
+    short: "Spend time where laughter happens.",
     desc: "Find the funny side today — share a laugh with someone, or watch something that genuinely cracks you up." },
   {
     id: "stretch", chem: "e", time: "morning", emoji: "🧘", title: "Stretching",
-    short: "Give your body the stretch it's asking for.",
+    short: "A short, consistent routine that mobilises you.",
     desc: "Three movements, three times through. It takes a minute or two and it's unbelievably effective.",
     learn: {
       bites: [
@@ -700,7 +700,16 @@ const ACTIONS = [
         { title: "Mobility is use-it-or-lose-it",
           body: "Run this routine three times a day and your range of movement starts to come back. Not over months — you'll notice within a week or two." },
       ],
-      movements: {
+      stepsTitle: "Building up to a hang",
+      steps: [
+        { title: "Hands on, feet down",
+          body: "Place your hands on the bar and keep your feet on the floor. Slightly slacken your legs and just feel what it's like to hold yourself up." },
+        { title: "One foot, then the other",
+          body: "As confidence builds, lift one foot off the floor. Then the other. Be careful — there's no prize for rushing this." },
+        { title: "Three seconds, then five, then ten",
+          body: "Build gradually toward thirty seconds. Done daily, this decompresses your spine, lengthens your body and keeps it mobile — endorphins now, and a different quality of life in twenty years." },
+      ],
+      movements: [{
         title: "The routine",
         note: "Three movements. Go through the whole thing three times.",
         items: [
@@ -720,7 +729,14 @@ const ACTIONS = [
                                    "Twist left, twist right",
                                    "Twist left, twist right"] },
         ],
-      },
+      }, {
+        title: "Bar hanging",
+        note: "Every time you pass a pull-up bar or monkey bars, hang from it.",
+        items: [
+          { figure: "hang", name: "The hang",
+            body: "Picture a seventy-five-year-old hanging from a bar in the park. You'd be astounded — and that's the point. Simply hanging decompresses your spine and keeps your body mobile and strong." },
+        ],
+      }],
       challenge: {
         title: "Three times a day",
         body: "Run the routine three times a day for a week. It costs you a couple of minutes and your mobility will start to shift.",
@@ -728,6 +744,31 @@ const ACTIONS = [
     },
   },
 ];
+
+/* ─── Reflection questions ───
+   The book's own way of helping you decide which action to take
+   forward. Shown at the foot of each action sheet, next to the
+   button that makes it your daily pick.                       */
+
+const REFLECT = {
+  flow: "Does training your capacity to enter deep focus each day excite you? Can you learn to push past those first fifteen minutes of discomfort in order to reach a state of relaxed accomplishment?",
+  discipline: "Does discipline need to be your focus right now — building your dopamine by living in a more careful, diligent way? Can you become disciplined at waking up and making your bed, and keeping your home clutter-free?",
+  phonefast: "Are you addicted to your phone? Be honest. Can you commit to ignoring it when you first wake up, and to an hour away from it each evening?",
+  coldwater: "Do you need to develop your tenacity, your willpower, your ability to embrace discomfort? Do you want to feel strong and empowered when facing a challenge?",
+  pursuit: "Do you need a clear goal — one meaningful enough that you'd willingly give up moments of indulgence to reach it? Can you spend a short period each day outdoors, phone-free, dreaming and planning?",
+
+  contribution: "Do you feel you're adequately focused on supporting the people around you? Are you satisfied with the contribution you're making? Sometimes it's a big thing; often it's simply calling someone and listening.",
+  touch: "Does physically connecting with people and animals bring you peace? Has the amount of physical connection in your life quietly reduced? Can you hug your friends and family more?",
+  social: "Do you feel happy and energised when you're with people? Can you see friends and family more often — coffee, walks, dinners, exercise? Can you ask yourself daily: have I done something fun with somebody else today?",
+  gratitude: "Do you want an underlying feeling of happiness each day? We live in a world of more — more money, better holidays, more followers — and desire for what you don't have is a life of dissatisfaction. Can you take a moment daily to ask what you're most grateful for?",
+  achievements: "Do you want to genuinely believe in yourself — to believe you can achieve what you set your mind to? Can you take a moment each day to celebrate some small progress you've made?",
+
+  nature: "Have you begun to feel the power of the natural world? Can you spend a short period out there each day — a park, a forest, a beach, a river — and disconnect from technology long enough to listen, look, smell and touch what's around you?",
+  sunlight: "Does sunlight change how you feel? Have you tried seeing daylight before social media each morning? It can be in nature, but it doesn't have to be — a moment outside a coffee shop counts.",
+  guthealth: "Does the answer lie in what you eat and drink? Does a life fuelled by natural, nutritious food appeal — energy crashes gone, a calm and consistent mood in their place? Can you swap ultra-processed for whole foods, raise your protein, and stay properly hydrated?",
+  underthink: "Does your mind feel busy? Do you overthink and worry regularly? Can you start a simple, slow breathing practice for a few minutes a day — one that not only helps you navigate the hard moments, but eventually stops them arriving so often?",
+  deepsleep: "Does a proper night's sleep change how you feel the next day? Can you make sleep a greater priority — and are you willing to trade late nights for earlier, happier mornings?",
+};
 
 /* ─── Praise & milestones ─── */
 
