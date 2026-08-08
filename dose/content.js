@@ -102,8 +102,12 @@ const CHEM_INFO = {
   },
 
   e: {
-    ready: false, /* summary page still to come — partial content renders fine */
+    ready: true,
+    fn: ["Coping with stress", "Physical health"],
     principles: ["They require hard physical exertion", "A natural brain and body de-stresser"],
+    low: ["Stressed", "Angry"],
+    high: ["Positive", "Relaxed"],
+    drains: ["Lack of exercise", "Sedentary lifestyle", "Lack of laughter", "Chronic stress"],
     quote: "Feeling stressed? Ah — I must boost my endorphins.",
     bites: [
       { title: "Built for outrunning predators",
@@ -649,9 +653,33 @@ const ACTIONS = [
   },
 
   /* ── Endorphins ── */
-  { id: "exercise",   chem: "e", time: "midday",  emoji: "🏃", title: "Exercise",
+  {
+    id: "exercise", chem: "e", time: "midday", emoji: "🏃", title: "Exercise",
     short: "Move your body in a way you enjoy.",
-    desc: "Move your body in a way you could keep doing for years — walk, lift, run, swim, play. Any movement counts." },
+    desc: "Move your body in a way you could keep doing for years — walk, lift, run, swim, play. Any movement counts.",
+    learn: {
+      bites: [
+        { title: "Two different jobs",
+          body: "Strength and endurance aren't the same training. Strength is lifting, bodyweight work, resistance bands. Endurance is walking, running, cycling, swimming, classes, martial arts, sport. A good week has some of each." },
+        { title: "Pick what you'd still be doing in ten years",
+          body: "The best exercise isn't the most efficient one — it's the one you'll keep choosing. Enjoyment is the variable that decides whether any of this survives contact with a busy month." },
+      ],
+      groups: {
+        title: "Choose your methods",
+        note: "Pick one way to strengthen your body and one way to train your endurance.",
+        sets: [
+          { name: "Strengthening", items: ["Lifting weights", "Bodyweight training", "Resistance bands"] },
+          { name: "Endurance", items: ["Walking", "Running", "Cycling", "Swimming",
+              "Gym classes", "Martial arts", "Sport"] },
+          { name: "Staying motivated", items: ["Competitions", "Smart decisions"] },
+        ],
+      },
+      challenge: {
+        title: "The Exercise Challenge",
+        body: "Two strength-training sessions and two endurance sessions over the next week. Four in total — that's the whole ask.",
+      },
+    },
+  },
   { id: "heat",       chem: "e", time: "evening", emoji: "🛁", title: "Heat",
     short: "Let heat melt the day's tension.",
     desc: "A hot bath, shower or sauna — let heat melt the tension of the day away from your phone." },
@@ -661,9 +689,44 @@ const ACTIONS = [
   { id: "laughter",   chem: "e", time: "evening", emoji: "😂", title: "Laughter",
     short: "Find the funny side today.",
     desc: "Find the funny side today — share a laugh with someone, or watch something that genuinely cracks you up." },
-  { id: "stretch",    chem: "e", time: "morning", emoji: "🧘", title: "Stretching",
+  {
+    id: "stretch", chem: "e", time: "morning", emoji: "🧘", title: "Stretching",
     short: "Give your body the stretch it's asking for.",
-    desc: "Give your body the stretch it's asking for — reach up, hang, twist. One or two minutes is plenty." },
+    desc: "Three movements, three times through. It takes a minute or two and it's unbelievably effective.",
+    learn: {
+      bites: [
+        { title: "Blood to the brain",
+          body: "Reaching tall and folding down sends a rush of blood into your head, and endorphins along with it. You feel it immediately — which is rare for something this small." },
+        { title: "Mobility is use-it-or-lose-it",
+          body: "Run this routine three times a day and your range of movement starts to come back. Not over months — you'll notice within a week or two." },
+      ],
+      movements: {
+        title: "The routine",
+        note: "Three movements. Go through the whole thing three times.",
+        items: [
+          { figure: "reachup", name: "Reach-ups",
+            body: "Standing tall, reach your hands as high as you can and try to touch the ceiling." },
+          { figure: "reachdown", name: "Reach-downs",
+            body: "Lean forward and reach down toward your toes. Stretch as far as you comfortably can, until you feel it in the back of your legs. Don't hurt yourself." },
+          { figure: "twist", name: "Twists",
+            body: "Raise your arms in front of you, palms facing down. Twist your arms around your body, first to the left, then to the right. You may hear a few cracks in your back." },
+        ],
+        cadence: [
+          { label: "So…", lines: ["Reach tall, reach down to your toes",
+                                  "Reach tall, reach down to your toes",
+                                  "Reach tall, reach down to your toes"] },
+          { label: "Now…", lines: ["Hands up in front of you",
+                                   "Twist left, twist right",
+                                   "Twist left, twist right",
+                                   "Twist left, twist right"] },
+        ],
+      },
+      challenge: {
+        title: "Three times a day",
+        body: "Run the routine three times a day for a week. It costs you a couple of minutes and your mobility will start to shift.",
+      },
+    },
+  },
 ];
 
 /* ─── Praise & milestones ─── */

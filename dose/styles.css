@@ -658,6 +658,46 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
 
 .prompt-follow { font-size: 0.85rem; color: var(--text-2); line-height: 1.6; }
 
+/* Movement figures */
+
+.movement {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 16px; padding: 12px 15px 12px 10px;
+  margin-bottom: 9px;
+}
+
+.fig {
+  flex-shrink: 0; width: 72px; height: 86px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 12px; background: var(--surface-2);
+}
+.fig svg { width: 100%; height: 100%; }
+.fig.c-d { color: var(--d); } .fig.c-o { color: var(--o); }
+.fig.c-s { color: var(--s); } .fig.c-e { color: var(--e); }
+
+.movement-main { flex: 1; min-width: 0; }
+.movement-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+.movement-body { font-size: 0.84rem; color: var(--text-2); line-height: 1.5; }
+
+/* Cadence columns */
+
+.cadence {
+  display: flex; gap: 10px; margin-top: 14px;
+  background: var(--surface-2); border-radius: 15px; padding: 15px 16px;
+}
+.cadence-col { flex: 1; min-width: 0; }
+.cadence-label {
+  font-size: 0.66rem; font-weight: 800; letter-spacing: 0.14em;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.cadence-label.c-d { color: var(--d); } .cadence-label.c-o { color: var(--o); }
+.cadence-label.c-s { color: var(--s); } .cadence-label.c-e { color: var(--e); }
+.cadence-line {
+  font-size: 0.8rem; font-weight: 600; line-height: 1.4;
+  padding: 4px 0;
+}
+
 /* Caution note */
 
 .caution {

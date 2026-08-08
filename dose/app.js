@@ -452,6 +452,59 @@ function actionRows(chem) {
 
 const TIME_LABEL = { morning: "☀️ Morning", midday: "🌤 Midday", evening: "🌙 Evening" };
 
+/* ── Movement figures ──
+   Simple line-art poses drawn in currentColor so they inherit the
+   chemical's accent and work in both light and dark themes.      */
+
+const FIGURES = {
+  /* standing tall, both arms stretched overhead */
+  reachup: `
+    <circle cx="50" cy="42" r="7"/>
+    <path d="M43 54 H57"/>
+    <path d="M50 54 V80"/>
+    <path d="M43 54 L34 16"/><path d="M57 54 L66 16"/>
+    <path d="M50 80 L42 106"/><path d="M50 80 L58 106"/>
+    <g opacity=".4">
+      <path d="M18 58 V30"/><path d="M14 36 L18 29 L22 36"/>
+      <path d="M82 58 V30"/><path d="M78 36 L82 29 L86 36"/>
+    </g>`,
+  /* side view, folded forward reaching for the toes */
+  reachdown: `
+    <circle cx="70" cy="66" r="7"/>
+    <path d="M44 54 L63 62"/>
+    <path d="M63 64 L55 100"/>
+    <path d="M44 54 L41 104"/><path d="M44 54 L49 104"/>
+    <path d="M39 105 H55"/>
+    <g opacity=".4">
+      <path d="M86 52 V86"/><path d="M82 80 L86 87 L90 80"/>
+    </g>`,
+  /* front view, arms swung across the body */
+  twist: `
+    <circle cx="50" cy="26" r="7"/>
+    <path d="M50 34 V70"/>
+    <path d="M50 42 L76 35"/><path d="M50 47 L74 45"/>
+    <path d="M50 70 L42 104"/><path d="M50 70 L58 104"/>
+    <g opacity=".4">
+      <path d="M30 56 A 20 7 0 1 0 66 52"/>
+      <path d="M60 46 L67 51 L61 57"/>
+    </g>`,
+};
+
+function movementBlock(m, chem) {
+  return `
+    <div class="movement">
+      <div class="fig c-${chem}">
+        <svg viewBox="0 0 100 120" aria-hidden="true" fill="none"
+          stroke="currentColor" stroke-width="3.2"
+          stroke-linecap="round" stroke-linejoin="round">${FIGURES[m.figure] || ""}</svg>
+      </div>
+      <div class="movement-main">
+        <div class="movement-name">${m.name}</div>
+        <p class="movement-body">${m.body}</p>
+      </div>
+    </div>`;
+}
+
 /* ── Action sheet ── */
 
 function openActionSheet(id) {
@@ -476,6 +529,20 @@ function openActionSheet(id) {
             <p class="step-body">${s.body}</p>
           </div>
         </div>`).join("") + `</div>`;
+  }
+
+  if (L && L.movements) {
+    const M = L.movements;
+    body += `<div class="section-label">${M.title}</div>`;
+    if (M.note) body += `<p class="group-note">${M.note}</p>`;
+    body += M.items.map(m => movementBlock(m, a.chem)).join("");
+    if (M.cadence) {
+      body += `<div class="cadence">${M.cadence.map(c => `
+        <div class="cadence-col">
+          <div class="cadence-label c-${a.chem}">${c.label}</div>
+          ${c.lines.map(l => `<div class="cadence-line">${l}</div>`).join("")}
+        </div>`).join("")}</div>`;
+    }
   }
 
   if (L && L.prompt) {
