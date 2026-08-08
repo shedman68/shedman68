@@ -587,6 +587,22 @@ const ACTIONS = [
         { title: "Open your eyes",
           body: "The whole practice takes under five minutes, and your brain comes out of it calmer, clearer and more focused. Done each morning, it compounds." },
       ],
+      extended: {
+        title: "On the practice itself",
+        note: "Added guidance, not from the book — the things most people wish they'd been told in the first fortnight.",
+        bites: [
+          { title: "The wandering is the practice",
+            body: "Your mind will drift within seconds, then again, and again. That isn't failure — noticing you've drifted and coming back is the actual repetition. A session where you wandered fifty times and returned fifty times is fifty reps." },
+          { title: "You're not aiming for a blank mind",
+            body: "Thoughts arriving is what minds do; you can't switch that off and you're not meant to. What changes is your relationship to them — letting them pass rather than climbing aboard and following them somewhere." },
+          { title: "Small and daily beats long and occasional",
+            body: "Two minutes every morning will do far more for you than twenty minutes twice a month. Anchor it to something already fixed — after you make the bed, before the first coffee — so there's no daily decision to make. The decision is what kills it, not the practice." },
+          { title: "It often feels like nothing",
+            body: "Especially early on. The benefit turns up outside the session: a slightly longer pause before you react, a bit less charge in a difficult moment. Judging the practice by how the session itself felt is the most common reason people stop." },
+          { title: "Sit up, and expect some restlessness",
+            body: "Upright and comfortable keeps you awake — lying flat mostly leads to sleep. A chair or sofa is fine, no special posture required. Some mornings you'll feel itchy or bored a minute in; that's usually just the contrast with a stimulating life, and it tends to settle if you stay." },
+        ],
+      },
       quote: "Becoming an underthinker is possible, starting from today.",
       list: [
         {

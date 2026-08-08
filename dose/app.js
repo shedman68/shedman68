@@ -108,7 +108,9 @@ function allBites() {
     for (const b of (CHEM_INFO[c].bites || [])) out.push({ ...b, chem: c, from: "chem" });
   }
   for (const a of ACTIONS) {
-    for (const b of ((a.learn && a.learn.bites) || [])) out.push({ ...b, chem: a.chem, from: a.id });
+    const L = a.learn || {};
+    for (const b of (L.bites || [])) out.push({ ...b, chem: a.chem, from: a.id });
+    for (const b of ((L.extended && L.extended.bites) || [])) out.push({ ...b, chem: a.chem, from: a.id });
   }
   return out;
 }
@@ -548,6 +550,14 @@ function openActionSheet(id) {
             <p class="step-body">${s.body}</p>
           </div>
         </div>`).join("") + `</div>`;
+  }
+
+  if (L && L.extended) {
+    const E = L.extended;
+    body += `
+      <div class="section-label">${E.title}</div>
+      <p class="extra-note">${E.note}</p>
+      ${biteCards(E.bites, a.chem)}`;
   }
 
   if (L && L.movements) {

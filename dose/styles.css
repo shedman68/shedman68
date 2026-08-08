@@ -620,6 +620,11 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
 
 .group-note { font-size: 0.85rem; color: var(--text-2); line-height: 1.5; margin: -4px 0 14px; }
 
+.extra-note {
+  font-size: 0.8rem; color: var(--text-2); line-height: 1.5;
+  font-style: italic; margin: -4px 0 14px;
+}
+
 .group-block { margin-bottom: 14px; }
 .group-name {
   font-size: 0.78rem; font-weight: 800; letter-spacing: 0.04em;
