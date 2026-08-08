@@ -680,15 +680,47 @@ const ACTIONS = [
       },
     },
   },
-  { id: "heat",       chem: "e", time: "evening", emoji: "🛁", title: "Heat",
+  {
+    id: "heat", chem: "e", time: "evening", emoji: "🛁", title: "Heat",
     short: "Immerse yourself in saunas or hot baths.",
-    desc: "A hot bath, shower or sauna — let heat melt the tension of the day away from your phone." },
-  { id: "music",      chem: "e", time: "morning", emoji: "🎶", title: "Music",
+    desc: "A hot bath or a sauna — a simple daily practice of immersing yourself in a hot environment, away from your phone.",
+    learn: {
+      bites: [
+        { title: "Exertion without the exercise",
+          body: "Heat puts your body under real physical stress, which is why it reaches endorphins the same way a hard session does. It's one of the routes that stays open when exercise isn't available to you." },
+        { title: "Leave the phone outside",
+          body: "The point isn't only the heat — it's twenty minutes where nothing can reach you. Bringing your phone in undoes most of what you came for." },
+      ],
+    },
+  },
+  {
+    id: "music", chem: "e", time: "morning", emoji: "🎶", title: "Music",
     short: "Sing and dance daily, especially mornings.",
-    desc: "Put on songs you love and sing along. Loudly is better. Dancing is extra credit." },
-  { id: "laughter",   chem: "e", time: "evening", emoji: "😂", title: "Laughter",
+    desc: "Put on songs you love and sing along. Dancing counts double. Mornings are the best time for it.",
+    learn: {
+      bites: [
+        { title: "Singing and dancing, not just listening",
+          body: "Listening is pleasant. Singing along and moving is what actually shifts you — it's physical exertion wearing a disguise, which is exactly what endorphins want." },
+        { title: "Learn the words",
+          body: "Knowing the lyrics to the songs you love is a small, silly investment that pays out every single time one comes on. It's the difference between hearing a song and being inside it." },
+      ],
+    },
+  },
+  {
+    id: "laughter", chem: "e", time: "evening", emoji: "😂", title: "Laughter",
     short: "Spend time where laughter happens.",
-    desc: "Find the funny side today — share a laugh with someone, or watch something that genuinely cracks you up." },
+    desc: "Put yourself in the rooms where laughter happens — with people who make you laugh, or something that genuinely cracks you up.",
+    learn: {
+      bites: [
+        { title: "Design the environment, not the mood",
+          body: "You can't decide to find things funny. What you can do is get yourself into the places and the company where laughter happens regularly — that's the actual lever." },
+        { title: "It's total presence",
+          body: "When something is so funny that every worry drops away for a moment, you're as present as you ever get. That's not a side effect of the laugh — it's most of the value." },
+        { title: "Less doom, more daft",
+          body: "Complaining and rehearsing the news puts you in the opposite environment. Not denial — just noticing that a steady diet of gloom makes the funny side harder to find." },
+      ],
+    },
+  },
   {
     id: "stretch", chem: "e", time: "morning", emoji: "🧘", title: "Stretching",
     short: "A short, consistent routine that mobilises you.",
@@ -768,6 +800,12 @@ const REFLECT = {
   guthealth: "Does the answer lie in what you eat and drink? Does a life fuelled by natural, nutritious food appeal — energy crashes gone, a calm and consistent mood in their place? Can you swap ultra-processed for whole foods, raise your protein, and stay properly hydrated?",
   underthink: "Does your mind feel busy? Do you overthink and worry regularly? Can you start a simple, slow breathing practice for a few minutes a day — one that not only helps you navigate the hard moments, but eventually stops them arriving so often?",
   deepsleep: "Does a proper night's sleep change how you feel the next day? Can you make sleep a greater priority — and are you willing to trade late nights for earlier, happier mornings?",
+
+  exercise: "Do you want to feel fitter? Stronger? If you ask yourself right now — do I need to move more? — what does your body answer? Your goal here is sustainability, not a big regime you abandon in two weeks.",
+  heat: "Does heat make you feel calm? Have you sat in a bath or a sauna and come out genuinely calmer? Could a simple daily practice of hot immersion, away from your phone, be your method?",
+  music: "How does music make you feel — and more specifically, how do singing and dancing make you feel? Euphoric? Present? Happy? Can you dance more often, and learn the words to the songs you love?",
+  laughter: "Do you laugh enough? Are there moments where something is so funny that every worry slips away and you're completely present? Can you get into those rooms more often — and complain less, and give the doom and gloom of the news a rest?",
+  stretch: "Does your body feel like it needs stretching? Ask it right now: would you like me to stretch you more? Can you do your reach-ups, reach-downs and twists each morning, and hang from a bar more often?",
 };
 
 /* ─── Praise & milestones ─── */

@@ -667,7 +667,7 @@ const OB_CHEM_INTRO = {
   d: "The chemical creating your drive. It controls how motivated you feel and your capacity to stay focused on your goals — built naturally by completing challenging things, and spiked then crashed by everything quick the modern world offers. Pick the one you'll actually do:",
   o: "The chemical that gives our purpose a scientific shape: love for yourself and the people around you. It's built through service to others and service to yourself. Pick the one that would change most:",
   s: "The natural chemical. It wants you to eat real food, sleep deeply, and breathe in the outdoors — and it's built mostly in your gut. Pick the one that would shift your mood and energy most:",
-  e: "Your body's built-in stress release, and the one chemical that asks for real physical exertion. Movement, heat, music, laughter, stretching. Pick your favourite:",
+  e: "The chemicals that de-stress your brain and body. Our modern world is fast and, honestly, stressful — so having something that reduces that on demand is quite a gift. Pick the one you'd genuinely look forward to:",
 };
 
 function startOnboarding() {

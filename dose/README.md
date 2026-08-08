@@ -66,6 +66,11 @@ Serve locally with `python3 -m http.server` and open `localhost:8000`.
 
 ### Direction
 
+See [PHILOSOPHY.md](PHILOSOPHY.md) for the posture underneath these — why
+returns matter more than streaks, why change comes in small single steps,
+and why nudges amplify strengths rather than chase weaknesses.
+
+
 The checklist is the surface, not the point. Once there is enough history to
 learn from, the app should help you *lean into* what you're drawn to:
 
