@@ -82,4 +82,11 @@ learn from, the app should help you *lean into* what you're drawn to:
 - Connect the daily practice to a larger philosophy of meaning and personal
   energy drives — helping people find what actually powers their life.
 
+Further out, the DOSE actions are the behavioural half of something larger:
+helping people understand *themselves* — why they're drawn to what they're
+drawn to — with philosophy as the reflective layer. The daily insight card
+is the natural rail for that, widening its pool rather than adding a second
+section to the app.
+
 Feedback loop: dogfood first, then a small group of friends, then iterate.
+Free, local-first, no accounts, for as long as that remains possible.
