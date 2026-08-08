@@ -15,6 +15,11 @@ const CHEM_COLORS = { d: "var(--d)", o: "var(--o)", s: "var(--s)", e: "var(--e)"
 
 const STORE_KEY = "doseDaily_v1";
 
+/* Stamped on every save and carried into exports, so a future sync or
+   migration can tell which shape it's looking at. Bump on breaking
+   changes to the stored structure. Must be declared before load() runs. */
+const SCHEMA = 1;
+
 let state = load();
 
 function load() {
@@ -22,13 +27,19 @@ function load() {
     const raw = localStorage.getItem(STORE_KEY);
     if (raw) {
       const s = JSON.parse(raw);
-      if (s && s.checks && s.chosen) return s;
+      if (s && s.checks && s.chosen) {
+        if (!s.v) s.v = SCHEMA;   // adopt pre-versioned data as v1
+        return s;
+      }
     }
   } catch (e) { /* corrupted storage — start fresh */ }
-  return { chosen: { ...DEFAULT_CHOSEN }, checks: {}, onboarded: false };
+  return { v: SCHEMA, chosen: { ...DEFAULT_CHOSEN }, checks: {}, onboarded: false };
 }
 
-function save() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+function save() {
+  state.v = SCHEMA;
+  localStorage.setItem(STORE_KEY, JSON.stringify(state));
+}
 
 /* ─── Date helpers ─── */
 
