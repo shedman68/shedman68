@@ -18,7 +18,7 @@ const STORE_KEY = "doseDaily_v1";
 /* Stamped on every save and carried into exports, so a future sync or
    migration can tell which shape it's looking at. Bump on breaking
    changes to the stored structure. Must be declared before load() runs. */
-const SCHEMA = 1;
+const SCHEMA = 2;
 
 let state = load();
 
@@ -28,12 +28,13 @@ function load() {
     if (raw) {
       const s = JSON.parse(raw);
       if (s && s.checks && s.chosen) {
-        if (!s.v) s.v = SCHEMA;   // adopt pre-versioned data as v1
+        if (!s.details) s.details = {};  // v2: which examples were ticked
+        s.v = SCHEMA;
         return s;
       }
     }
   } catch (e) { /* corrupted storage — start fresh */ }
-  return { v: SCHEMA, chosen: { ...DEFAULT_CHOSEN }, checks: {}, onboarded: false };
+  return { v: SCHEMA, chosen: { ...DEFAULT_CHOSEN }, checks: {}, details: {}, onboarded: false };
 }
 
 function save() {
@@ -58,6 +59,12 @@ function dayOfYear() {
 
 function todayChecks() { return state.checks[today()] || []; }
 function isChecked(id) { return todayChecks().includes(id); }
+
+/* which examples were ticked for an action today */
+function todayDetails(id) {
+  const d = state.details[today()];
+  return (d && d[id]) || [];
+}
 
 function chemsDone(dayKey) {
   const done = new Set();
@@ -254,6 +261,7 @@ function renderActions() {
   $("actionList").innerHTML = actions.map(a => {
     const chosen = Object.values(state.chosen).includes(a.id);
     const checked = isChecked(a.id);
+    const detail = todayDetails(a.id);
     return `
     <div class="action ${checked ? "checked" : ""}">
       <button class="action-row" data-toggle="${a.id}" aria-pressed="${checked}">
@@ -269,7 +277,8 @@ function renderActions() {
       </button>
       <div class="action-desc">
         ${a.short}
-        ${a.learn ? `<button class="learn-link" data-learn="${a.id}">Why it works →</button>` : ""}
+        ${detail.length ? `<div class="action-picked">${detail.map(d => `<span>${d}</span>`).join("")}</div>` : ""}
+        <button class="learn-link" data-learn="${a.id}">See examples →</button>
       </div>
     </div>`;
   }).join("");
@@ -356,7 +365,7 @@ function confetti() {
 
 /* ─── Checking off ─── */
 
-function toggleAction(id) {
+function toggleAction(id, quiet) {
   const key = today();
   if (!state.checks[key]) state.checks[key] = [];
   const list = state.checks[key];
@@ -366,11 +375,13 @@ function toggleAction(id) {
 
   if (idx >= 0) {
     list.splice(idx, 1);
+    // un-ticking the action drops any examples recorded against it
+    if (state.details[key]) delete state.details[key][id];
   } else {
     list.push(id);
     const pool = PRAISE[byId[id].chem];
     toast(pool[Math.floor(Math.random() * pool.length)]);
-    if (navigator.vibrate) navigator.vibrate(12);
+    if (!quiet && navigator.vibrate) navigator.vibrate(12);
   }
   save();
 
@@ -387,10 +398,11 @@ function toggleAction(id) {
 
 /* ═══════════════ Sheets ═══════════════ */
 
-function openSheet(html) {
+function openSheet(html, keepScroll) {
+  const top = keepScroll ? $("sheet").scrollTop : 0;
   $("sheetContent").innerHTML = html;
   $("sheetBackdrop").classList.remove("hidden");
-  $("sheet").scrollTop = 0;
+  $("sheet").scrollTop = top;
 }
 
 function closeSheet() { $("sheetBackdrop").classList.add("hidden"); }
@@ -528,13 +540,38 @@ function movementBlock(m, chem) {
 
 /* ── Action sheet ── */
 
-function openActionSheet(id) {
+function openActionSheet(id, keepScroll, openDeep) {
   const a = byId[id], chem = CHEMS[a.chem], color = CHEM_COLORS[a.chem];
   const L = a.learn;
+  const picked = todayDetails(id);
+  const done = isChecked(id);
 
+  /* ── the part you actually use each day ── */
   let body = `
     ${sheetHead(`${chem.name} · ${TIME_LABEL[a.time]}`, `${a.emoji} ${a.title}`, color)}
-    <p class="sheet-lead">${a.desc}</p>`;
+    <p class="sheet-lead">${a.short}</p>
+
+    <div class="section-label">What did you do?</div>
+    <div class="ex-grid">
+      ${(EXAMPLES[id] || []).map(x => `
+        <button class="ex c-${a.chem} ${picked.includes(x) ? "on" : ""}"
+          data-ex="${id}" data-exval="${x.replace(/"/g, "&quot;")}">${x}</button>`).join("")}
+    </div>
+
+    <button class="btn-done ${done ? "is-done" : ""}" data-done="${id}">
+      ${done ? "✓ Done today" : "Mark as done"}
+    </button>`;
+
+  /* ── everything below is optional reading ── */
+  body += `
+    <button class="disclose ${openDeep ? "open" : ""}" data-deep="${id}">
+      ${openDeep ? "Hide the detail" : "Why it works, and how"} <span class="chev">${openDeep ? "▲" : "▼"}</span>
+    </button>`;
+
+  if (!openDeep) {
+    body += `<div class="sheet-cta"><button class="btn-primary" data-close>Close</button></div>`;
+    return openSheet(body, keepScroll);
+  }
 
   if (L && L.bites) {
     body += `<div class="section-label">Why it works</div>${biteCards(L.bites, a.chem)}`;
@@ -640,7 +677,27 @@ function openActionSheet(id) {
       <button class="btn-primary" data-close>Got it</button>
     </div>`;
 
-  openSheet(body);
+  openSheet(body, keepScroll);
+}
+
+/* ticking an example records the detail and marks the action done;
+   clearing the last one un-marks it again */
+function toggleExample(id, value) {
+  const key = today();
+  if (!state.details[key]) state.details[key] = {};
+  const list = state.details[key][id] || (state.details[key][id] = []);
+  const i = list.indexOf(value);
+
+  if (i >= 0) list.splice(i, 1);
+  else list.push(value);
+
+  const shouldBeChecked = list.length > 0;
+  if (shouldBeChecked !== isChecked(id)) toggleAction(id, true);
+  else save();
+
+  if (navigator.vibrate) navigator.vibrate(8);
+  renderToday();
+  openActionSheet(id, true, document.querySelector(".disclose.open") !== null);
 }
 
 /* ── Settings sheet ── */
@@ -767,6 +824,19 @@ function showView(name) {
 document.addEventListener("click", e => {
   const toggle = e.target.closest("[data-toggle]");
   if (toggle) return toggleAction(toggle.dataset.toggle);
+
+  const ex = e.target.closest("[data-ex]");
+  if (ex) return toggleExample(ex.dataset.ex, ex.dataset.exval);
+
+  const doneBtn = e.target.closest("[data-done]");
+  if (doneBtn) {
+    const id = doneBtn.dataset.done;
+    toggleAction(id);
+    return openActionSheet(id, true, document.querySelector(".disclose.open") !== null);
+  }
+
+  const deep = e.target.closest("[data-deep]");
+  if (deep) return openActionSheet(deep.dataset.deep, true, !deep.classList.contains("open"));
 
   const learn = e.target.closest("[data-learn]");
   if (learn) {

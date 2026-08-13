@@ -491,6 +491,57 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
 
 .action-desc .learn-link { display: block; margin-top: 8px; }
 
+/* ═══ Tickable examples ═══ */
+
+.ex-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+
+.ex {
+  font-size: 0.88rem; font-weight: 600;
+  background: var(--surface); color: var(--text);
+  border: 1.5px solid var(--line);
+  border-radius: 999px; padding: 10px 15px;
+  transition: transform 0.12s ease, background 0.18s ease, border-color 0.18s ease;
+}
+.ex:active { transform: scale(0.95); }
+.ex.on { color: #fff; border-color: transparent; }
+.ex.on::before { content: "✓ "; font-weight: 800; }
+.ex.on.c-d { background: var(--d); }
+.ex.on.c-o { background: var(--o); }
+.ex.on.c-s { background: var(--s); }
+.ex.on.c-e { background: var(--e); }
+
+.btn-done {
+  width: 100%;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  border-radius: 999px; padding: 14px;
+  font-weight: 700; font-size: 0.98rem;
+  transition: transform 0.12s ease;
+}
+.btn-done:active { transform: scale(0.985); }
+.btn-done.is-done { background: var(--check); border-color: var(--check); color: #fff; }
+
+/* Progressive disclosure */
+
+.disclose {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  margin-top: 20px; padding: 13px;
+  font-size: 0.88rem; font-weight: 700;
+  color: var(--text-2);
+  border-top: 1px solid var(--line);
+}
+.disclose .chev { font-size: 0.65rem; }
+
+/* Examples echoed on the daily card */
+
+.action-picked { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+.action-picked span {
+  font-size: 0.72rem; font-weight: 700;
+  background: var(--surface-2); color: var(--text-2);
+  border-radius: 999px; padding: 3px 9px;
+}
+
 /* ═══ Sheet content ═══ */
 
 .sheet-head {

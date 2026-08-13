@@ -793,6 +793,54 @@ const ACTIONS = [
   },
 ];
 
+/* ─── Concrete examples ───
+   Tappable in the action sheet: tick what you actually did. These are
+   what makes an action legible at a glance — "Exercise" is abstract,
+   "Walk" is not.                                                     */
+
+const EXAMPLES = {
+  flow: ["Deep work block", "Writing", "Coding", "Reading", "Drawing or painting",
+         "Instrument practice", "Studying"],
+  discipline: ["Made my bed", "Tidied a room", "Cleared my desk", "Washed up straight away",
+               "Did the laundry", "Decluttered something"],
+  phonefast: ["No phone first hour", "Phone in another room", "An hour off this evening",
+              "Airplane mode", "Phone out of the bedroom"],
+  coldwater: ["Cold finish to my shower", "30 seconds", "60 seconds", "Cold plunge",
+              "Cold water on my face"],
+  pursuit: ["Phone-free walk", "Thought about my goal", "Wrote down a plan",
+            "Sat outside thinking", "Talked it through"],
+
+  contribution: ["Helped someone", "Cooked for someone", "Really listened", "Helped a colleague",
+                 "Gave to charity", "Smiled at a stranger", "Chatted to shop staff"],
+  touch: ["Hugged someone", "Cuddled a pet", "Held hands", "A proper goodbye hug",
+          "Time with my partner"],
+  social: ["Coffee with someone", "Walk with a friend", "Called someone", "Dinner with others",
+           "Exercised with someone", "A real check-in message"],
+  gratitude: ["A person", "My home", "My health", "My work", "Nature", "Food and drink",
+              "What I'm learning", "Told someone thank you"],
+  achievements: ["Noticed my progress", "Celebrated a win", "Told myself well done",
+                 "Celebrated someone else"],
+
+  nature: ["Walk in a park", "Time by water", "Sat on the grass", "Woods or forest",
+           "Counted the colours", "Listened to the birds"],
+  sunlight: ["Daylight within 30 min", "Ten minutes outside", "Morning walk", "Coffee outside",
+             "Sunlight before my phone"],
+  guthealth: ["Protein-led meal", "Veg with every meal", "Drank enough water",
+              "Fruit instead of snacks", "No ultra-processed", "Coffee after 90 min"],
+  underthink: ["Resonance breathing", "Sigh breathing", "Body scan", "The morning practice",
+               "Breathed before bed", "Talked it out", "Wrote it down"],
+  deepsleep: ["Consistent bedtime", "Phone out of the bedroom", "In bed on time",
+              "No screens before bed", "Seven hours or more"],
+
+  exercise: ["Walk", "Run", "Gym or weights", "Cycling", "Swimming", "A class", "Sport",
+             "Bodyweight session"],
+  heat: ["Hot bath", "Sauna", "Hot shower", "Steam room"],
+  music: ["Sang along", "Danced", "Morning playlist", "Learned some lyrics", "Live music"],
+  laughter: ["Laughed with someone", "Comedy", "Something daft online", "Messing about with kids",
+             "Shared a joke"],
+  stretch: ["The full routine ×3", "Reach-ups", "Reach-downs", "Twists", "Bar hang", "Yoga"],
+};
+
 /* ─── Reflection questions ───
    The book's own way of helping you decide which action to take
    forward. Shown at the foot of each action sheet, next to the
