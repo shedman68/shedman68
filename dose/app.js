@@ -66,6 +66,22 @@ function todayDetails(id) {
   return (d && d[id]) || [];
 }
 
+/* how many times this action has been done in the last 7 days.
+   Competence feedback ("your 3rd this week") reinforces without
+   turning the app into a scoreboard — see PHILOSOPHY.md §7. */
+function countThisWeek(id) {
+  let n = 0;
+  for (let i = 0; i < 7; i++) {
+    if ((state.checks[dkey(daysAgo(i))] || []).includes(id)) n++;
+  }
+  return n;
+}
+
+const ORDINAL = ["", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th"];
+
+/* transient flags so a freshly-completed thing can animate once */
+let flashChem = null, flashEx = null;
+
 function chemsDone(dayKey) {
   const done = new Set();
   for (const id of state.checks[dayKey] || []) {
@@ -178,7 +194,8 @@ function renderRing() {
   order.forEach((c, i) => {
     const a0 = i * 90 + gap / 2, a1 = (i + 1) * 90 - gap / 2;
     const on = done.has(c);
-    svg += `<path class="ring-seg" d="${arcPath(60, 60, 51, a0, a1)}"
+    svg += `<path class="ring-seg ${on && c === flashChem ? "just" : ""}"
+      pathLength="1" d="${arcPath(60, 60, 51, a0, a1)}"
       fill="none" stroke="${on ? CHEM_COLORS[c] : "var(--surface-2)"}"
       stroke-width="10" stroke-linecap="round"/>`;
   });
@@ -264,21 +281,24 @@ function renderActions() {
     const detail = todayDetails(a.id);
     return `
     <div class="action ${checked ? "checked" : ""}">
-      <button class="action-row" data-toggle="${a.id}" aria-pressed="${checked}">
-        <span class="action-emoji">${a.emoji}</span>
-        <span class="action-main">
-          <span class="action-title">${a.title}${chosen ? '<span class="star">⭐</span>' : ""}</span>
-          <span class="action-meta">
-            <span class="tag c-${a.chem}">${CHEMS[a.chem].letter}</span>
-            <span class="action-hint">${CHEMS[a.chem].name}${chosen ? " · your pick" : ""}</span>
+      <div class="action-head">
+        <button class="action-row" data-learn="${a.id}">
+          <span class="action-emoji">${a.emoji}</span>
+          <span class="action-main">
+            <span class="action-title">${a.title}${chosen ? '<span class="star">⭐</span>' : ""}</span>
+            <span class="action-meta">
+              <span class="tag c-${a.chem}">${CHEMS[a.chem].letter}</span>
+              <span class="action-hint">${CHEMS[a.chem].name}${chosen ? " · your pick" : ""}</span>
+            </span>
           </span>
-        </span>
-        <span class="check">✓</span>
-      </button>
-      <div class="action-desc">
+          <span class="row-chev">›</span>
+        </button>
+        <button class="check" data-toggle="${a.id}" aria-pressed="${checked}"
+          aria-label="${checked ? "Undo" : "Mark done"} — ${a.title}">✓</button>
+      </div>
+      <div class="action-desc" data-learn="${a.id}">
         ${a.short}
         ${detail.length ? `<div class="action-picked">${detail.map(d => `<span>${d}</span>`).join("")}</div>` : ""}
-        <button class="learn-link" data-learn="${a.id}">See examples →</button>
       </div>
     </div>`;
   }).join("");
@@ -337,15 +357,18 @@ function renderPatterns() {
 /* ─── Toast & celebration ─── */
 
 let toastTimer = null;
-function toast(msg) {
+function toast(msg, sub) {
   const el = $("toast");
-  el.textContent = msg;
+  el.innerHTML = sub
+    ? `<span>${msg}</span><span class="toast-sub">${sub}</span>`
+    : `<span>${msg}</span>`;
+  el.classList.toggle("stacked", Boolean(sub));
   el.classList.remove("hidden", "out");
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => {
     el.classList.add("out");
     setTimeout(() => el.classList.add("hidden"), 350);
-  }, 2200);
+  }, sub ? 2800 : 2200);
 }
 
 function confetti() {
@@ -379,8 +402,14 @@ function toggleAction(id, quiet) {
     if (state.details[key]) delete state.details[key][id];
   } else {
     list.push(id);
-    const pool = PRAISE[byId[id].chem];
-    toast(pool[Math.floor(Math.random() * pool.length)]);
+    const chem = byId[id].chem;
+    const pool = PRAISE[chem];
+    const n = countThisWeek(id);
+    // praise first, then a plain fact about progress — informational, not a score
+    toast(pool[Math.floor(Math.random() * pool.length)],
+          n > 1 ? `${ORDINAL[n] || n + "th"} time this week` : null);
+    flashChem = chem;
+    setTimeout(() => { flashChem = null; }, 900);
     if (!quiet && navigator.vibrate) navigator.vibrate(12);
   }
   save();
@@ -545,6 +574,7 @@ function openActionSheet(id, keepScroll, openDeep) {
   const L = a.learn;
   const picked = todayDetails(id);
   const done = isChecked(id);
+  const weekCount = countThisWeek(id);
 
   /* ── the part you actually use each day ── */
   let body = `
@@ -554,13 +584,16 @@ function openActionSheet(id, keepScroll, openDeep) {
     <div class="section-label">What did you do?</div>
     <div class="ex-grid">
       ${(EXAMPLES[id] || []).map(x => `
-        <button class="ex c-${a.chem} ${picked.includes(x) ? "on" : ""}"
+        <button class="ex c-${a.chem} ${picked.includes(x) ? "on" : ""} ${x === flashEx ? "just" : ""}"
           data-ex="${id}" data-exval="${x.replace(/"/g, "&quot;")}">${x}</button>`).join("")}
     </div>
 
     <button class="btn-done ${done ? "is-done" : ""}" data-done="${id}">
       ${done ? "✓ Done today" : "Mark as done"}
-    </button>`;
+    </button>
+    ${done && weekCount > 1
+      ? `<p class="competence">That's your ${ORDINAL[weekCount] || weekCount + "th"} this week.</p>`
+      : ""}`;
 
   /* ── everything below is optional reading ── */
   body += `
@@ -691,6 +724,9 @@ function toggleExample(id, value) {
   if (i >= 0) list.splice(i, 1);
   else list.push(value);
 
+  flashEx = i >= 0 ? null : value;
+  setTimeout(() => { flashEx = null; }, 500);
+
   const shouldBeChecked = list.length > 0;
   if (shouldBeChecked !== isChecked(id)) toggleAction(id, true);
   else save();
@@ -716,6 +752,11 @@ function openSettings() {
         </select>
       </div>`).join("")}
     <div class="set-group">
+      <div class="set-label">Daily reminders</div>
+      <div id="reminderBox"></div>
+    </div>
+
+    <div class="set-group">
       <div class="set-label">Your data</div>
       <div class="set-row-btns">
         <button class="btn-small" data-act="export">Export data</button>
@@ -723,7 +764,81 @@ function openSettings() {
         <button class="btn-small btn-danger" data-act="reset">Reset everything</button>
       </div>
     </div>
-    <p class="sheet-sub">Everything is stored only on this device. Export now and then to keep a backup.</p>`);
+    <p class="sheet-sub">Your DOSE history is stored only on this device. Export now and then to keep a backup.</p>`);
+
+  renderReminders();
+}
+
+/* ─── Reminders ─── */
+
+const DEFAULT_SLOTS = ["08:00", "13:00", "20:00"];
+
+function reminderSlots() {
+  const r = state.reminders;
+  return (r && Array.isArray(r.slots) && r.slots.length) ? r.slots : DEFAULT_SLOTS;
+}
+
+async function renderReminders() {
+  const box = $("reminderBox");
+  if (!box) return;
+
+  const blocker = PUSH.blocker();
+  if (blocker) {
+    box.innerHTML = `<p class="sheet-sub" style="margin:0">${blocker}</p>`;
+    return;
+  }
+
+  const on = Boolean(state.reminders && state.reminders.enabled) && Boolean(await PUSH.subscription());
+  const slots = reminderSlots();
+
+  box.innerHTML = `
+    <button class="btn-done ${on ? "is-done" : ""}" data-act="rem-toggle">
+      ${on ? "✓ Reminders on" : "Turn on reminders"}
+    </button>
+    <div class="rem-times ${on ? "" : "dim"}">
+      ${["Morning", "Midday", "Evening"].map((label, i) => `
+        <label class="rem-row">
+          <span>${label}</span>
+          <input type="time" class="rem-input" data-slot="${i}"
+            value="${slots[i] || DEFAULT_SLOTS[i]}" ${on ? "" : "disabled"}>
+        </label>`).join("")}
+    </div>
+    <p class="sheet-sub" style="margin:10px 0 0">
+      A gentle nudge, nothing more — no counts, no guilt. Only the times and this
+      device's notification token leave your phone.</p>`;
+}
+
+async function setReminders(enable) {
+  const slots = reminderSlots();
+  try {
+    if (enable) {
+      await PUSH.enable(slots);
+      state.reminders = { enabled: true, slots };
+      toast("Reminders on. 🔔");
+    } else {
+      await PUSH.disable();
+      state.reminders = { enabled: false, slots };
+      toast("Reminders off.");
+    }
+    save();
+  } catch (e) {
+    toast(String(e.message || e).includes("Permission") ? "Notifications were declined." : "Couldn't reach the server.");
+  }
+  renderReminders();
+}
+
+async function saveReminderTimes() {
+  const inputs = [...document.querySelectorAll(".rem-input")];
+  const slots = inputs.map(i => i.value).filter(Boolean);
+  if (slots.length !== inputs.length) return;
+  state.reminders = { enabled: true, slots };
+  save();
+  try {
+    await PUSH.update(slots);
+    toast("Times updated.");
+  } catch {
+    toast("Saved on device — couldn't reach the server.");
+  }
 }
 
 function exportData() {
@@ -861,6 +976,9 @@ document.addEventListener("click", e => {
 
   const act = e.target.closest("[data-act]");
   if (act) {
+    if (act.dataset.act === "rem-toggle") {
+      return setReminders(!(state.reminders && state.reminders.enabled));
+    }
     if (act.dataset.act === "export") return exportData();
     if (act.dataset.act === "redo") { closeSheet(); return startOnboarding(); }
     if (act.dataset.act === "reset" && confirm("Delete all history and choices on this device?")) {
@@ -881,6 +999,8 @@ document.addEventListener("click", e => {
 });
 
 document.addEventListener("change", e => {
+  if (e.target.closest(".rem-input")) return saveReminderTimes();
+
   const sel = e.target.closest("[data-chem-select]");
   if (sel) {
     state.chosen[sel.dataset.chemSelect] = sel.value;

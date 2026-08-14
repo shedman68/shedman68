@@ -1,11 +1,13 @@
 /* DOSE Daily — service worker: cache-first app shell, refreshed in the background */
 
-const VERSION = "dose-v1.3.0";
+const VERSION = "dose-v1.5.0";
 const SHELL = [
   ".",
   "index.html",
   "styles.css",
+  "config.js",
   "content.js",
+  "push.js",
   "app.js",
   "manifest.webmanifest",
   "icons/icon-192.png",
@@ -24,6 +26,34 @@ self.addEventListener("activate", e => {
       .then(keys => Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
+});
+
+/* ─── Push reminders ─── */
+
+self.addEventListener("push", e => {
+  let data = { title: "DOSE", body: "A good moment for one of your four." };
+  try {
+    if (e.data) data = { ...data, ...e.data.json() };
+  } catch { /* non-JSON payload — keep the default wording */ }
+
+  e.waitUntil(self.registration.showNotification(data.title, {
+    body: data.body,
+    icon: "icons/icon-192.png",
+    badge: "icons/icon-192.png",
+    tag: data.tag || "dose-reminder",
+    renotify: false,
+  }));
+});
+
+self.addEventListener("notificationclick", e => {
+  e.notification.close();
+  e.waitUntil((async () => {
+    const all = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+    for (const client of all) {
+      if ("focus" in client) return client.focus();
+    }
+    if (self.clients.openWindow) return self.clients.openWindow("./");
+  })());
 });
 
 self.addEventListener("fetch", e => {
