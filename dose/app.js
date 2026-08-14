@@ -18,7 +18,7 @@ const STORE_KEY = "doseDaily_v1";
 /* Stamped on every save and carried into exports, so a future sync or
    migration can tell which shape it's looking at. Bump on breaking
    changes to the stored structure. Must be declared before load() runs. */
-const SCHEMA = 2;
+const SCHEMA = 3;
 
 let state = load();
 
@@ -29,12 +29,14 @@ function load() {
       const s = JSON.parse(raw);
       if (s && s.checks && s.chosen) {
         if (!s.details) s.details = {};  // v2: which examples were ticked
+        if (!s.recipes) s.recipes = {};  // v3: habit anchors per action
         s.v = SCHEMA;
         return s;
       }
     }
   } catch (e) { /* corrupted storage — start fresh */ }
-  return { v: SCHEMA, chosen: { ...DEFAULT_CHOSEN }, checks: {}, details: {}, onboarded: false };
+  return { v: SCHEMA, chosen: { ...DEFAULT_CHOSEN }, checks: {},
+           details: {}, recipes: {}, onboarded: false };
 }
 
 function save() {
@@ -220,8 +222,25 @@ function renderRing() {
 function renderNudge() {
   const el = $("nudge");
   const checks = todayChecks();
+  const yesterday = state.checks[dkey(daysAgo(1))] || [];
 
-  // the chosen action with the longest drought (3+ days)
+  if (Object.keys(state.checks).length < 2) { el.classList.add("hidden"); return; }
+
+  /* Never miss twice. One missed day barely dents a forming habit —
+     two in a row is where habits actually die. So the only moment worth
+     nudging is the day after a miss, and the ask is small. */
+  for (const c of Object.keys(CHEMS)) {
+    const id = state.chosen[c];
+    if (checks.includes(id) || yesterday.includes(id)) continue;
+    if (countThisWeek(id) === 0) continue;      // not an established habit yet
+    const a = byId[id];
+    el.innerHTML = `↩️ You missed <b>${a.emoji} ${a.title}</b> yesterday — never miss twice.
+      <span class="nudge-tiny">${TINY[id]}</span>`;
+    el.classList.remove("hidden");
+    return;
+  }
+
+  // otherwise, the chosen action with the longest drought (3+ days)
   let worst = null, worstGap = 2;
   for (const c of Object.keys(CHEMS)) {
     const id = state.chosen[c];
@@ -234,9 +253,10 @@ function renderNudge() {
     if (gap > worstGap) { worstGap = gap; worst = byId[id]; }
   }
 
-  if (worst && Object.keys(state.checks).length >= 2) {
+  if (worst) {
     const days = worstGap > 30 ? "a while" : `${worstGap} days`;
-    el.innerHTML = `💡 It's been ${days} since <b>${worst.emoji} ${worst.title}</b> — maybe today's the day?`;
+    el.innerHTML = `💡 It's been ${days} since <b>${worst.emoji} ${worst.title}</b> — is that a gap worth closing, or just not your thing?
+      <span class="nudge-tiny">${TINY[worst.id]}</span>`;
     el.classList.remove("hidden");
   } else {
     el.classList.add("hidden");
@@ -297,7 +317,9 @@ function renderActions() {
           aria-label="${checked ? "Undo" : "Mark done"} — ${a.title}">✓</button>
       </div>
       <div class="action-desc" data-learn="${a.id}">
-        ${a.short}
+        ${!checked && chosen && state.recipes[a.id]
+          ? `<span class="cue">↳ After ${state.recipes[a.id]}</span>`
+          : a.short}
         ${detail.length ? `<div class="action-picked">${detail.map(d => `<span>${d}</span>`).join("")}</div>` : ""}
       </div>
     </div>`;
@@ -506,6 +528,35 @@ function actionRows(chem) {
 
 const TIME_LABEL = { morning: "☀️ Morning", midday: "🌤 Midday", evening: "🌙 Evening" };
 
+/* ── Habit recipe ──
+   An implementation intention: "after X, I will Y". Deciding in advance
+   when and where a behaviour happens is far more effective than deciding
+   to want it more — and stacking onto something already automatic beats
+   relying on memory. Only offered for your four chosen actions: those are
+   the habits you're actually building. */
+
+const isChosenAction = id => Object.values(state.chosen).includes(id);
+
+function habitRecipe(a) {
+  const anchor = state.recipes[a.id] || "";
+  return `
+    <div class="recipe c-${a.chem}">
+      <div class="recipe-label">Make it automatic</div>
+      <div class="recipe-line">
+        After <input class="recipe-input" data-recipe="${a.id}"
+          value="${anchor.replace(/"/g, "&quot;")}"
+          placeholder="${ANCHORS[a.time][0].toLowerCase()}">,
+        I'll do this.
+      </div>
+      ${anchor ? "" : `
+        <div class="recipe-chips">
+          ${ANCHORS[a.time].map(s => `
+            <button class="recipe-chip" data-anchor="${a.id}"
+              data-anchorval="${s.replace(/"/g, "&quot;")}">${s}</button>`).join("")}
+        </div>`}
+    </div>`;
+}
+
 /* ── Movement figures ──
    Simple line-art poses drawn in currentColor so they inherit the
    chemical's accent and work in both light and dark themes.      */
@@ -593,7 +644,16 @@ function openActionSheet(id, keepScroll, openDeep) {
     </button>
     ${done && weekCount > 1
       ? `<p class="competence">That's your ${ORDINAL[weekCount] || weekCount + "th"} this week.</p>`
-      : ""}`;
+      : ""}
+
+    ${!done ? `
+      <div class="tiny-card">
+        <div class="tiny-label">Short on time or energy?</div>
+        <div class="tiny-body">${TINY[id]}</div>
+        <button class="tiny-btn c-${a.chem}" data-tiny="${id}">That'll do — mark it done</button>
+      </div>` : ""}
+
+    ${isChosenAction(id) ? habitRecipe(a) : ""}`;
 
   /* ── everything below is optional reading ── */
   body += `
@@ -943,6 +1003,23 @@ document.addEventListener("click", e => {
   const ex = e.target.closest("[data-ex]");
   if (ex) return toggleExample(ex.dataset.ex, ex.dataset.exval);
 
+  const tiny = e.target.closest("[data-tiny]");
+  if (tiny) {
+    const id = tiny.dataset.tiny;
+    if (!isChecked(id)) toggleAction(id);
+    renderToday();
+    return openActionSheet(id, true, document.querySelector(".disclose.open") !== null);
+  }
+
+  const anchor = e.target.closest("[data-anchor]");
+  if (anchor) {
+    state.recipes[anchor.dataset.anchor] = anchor.dataset.anchorval;
+    save();
+    renderToday();
+    return openActionSheet(anchor.dataset.anchor, true,
+      document.querySelector(".disclose.open") !== null);
+  }
+
   const doneBtn = e.target.closest("[data-done]");
   if (doneBtn) {
     const id = doneBtn.dataset.done;
@@ -1000,6 +1077,15 @@ document.addEventListener("click", e => {
 
 document.addEventListener("change", e => {
   if (e.target.closest(".rem-input")) return saveReminderTimes();
+
+  const recipe = e.target.closest("[data-recipe]");
+  if (recipe) {
+    const v = recipe.value.trim();
+    if (v) state.recipes[recipe.dataset.recipe] = v;
+    else delete state.recipes[recipe.dataset.recipe];
+    save();
+    return renderToday();
+  }
 
   const sel = e.target.closest("[data-chem-select]");
   if (sel) {

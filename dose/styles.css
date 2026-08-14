@@ -572,6 +572,56 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
   font-size: 0.84rem; font-weight: 600; color: var(--text-2);
 }
 
+/* Two-minute version */
+
+.tiny-card {
+  margin-top: 16px; padding: 14px 16px;
+  background: var(--surface-2); border-radius: 15px;
+}
+.tiny-label {
+  font-size: 0.66rem; font-weight: 800; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-2); margin-bottom: 6px;
+}
+.tiny-body { font-size: 0.95rem; font-weight: 700; line-height: 1.4; margin-bottom: 11px; }
+.tiny-btn {
+  width: 100%; padding: 11px;
+  border-radius: 999px; font-size: 0.86rem; font-weight: 700;
+  color: #fff;
+}
+.tiny-btn.c-d { background: var(--d); } .tiny-btn.c-o { background: var(--o); }
+.tiny-btn.c-s { background: var(--s); } .tiny-btn.c-e { background: var(--e); }
+
+/* Habit recipe */
+
+.recipe {
+  margin-top: 16px; padding: 15px 16px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-left: 3px solid var(--line); border-radius: 15px;
+}
+.recipe.c-d { border-left-color: var(--d); } .recipe.c-o { border-left-color: var(--o); }
+.recipe.c-s { border-left-color: var(--s); } .recipe.c-e { border-left-color: var(--e); }
+
+.recipe-label {
+  font-size: 0.66rem; font-weight: 800; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-2); margin-bottom: 8px;
+}
+.recipe-line { font-size: 0.95rem; font-weight: 600; line-height: 1.7; }
+.recipe-input {
+  font: inherit; font-weight: 700;
+  color: var(--text); background: var(--surface-2);
+  border: none; border-radius: 8px;
+  padding: 3px 9px; min-width: 130px; max-width: 100%;
+}
+.recipe-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 11px; }
+.recipe-chip {
+  font-size: 0.78rem; font-weight: 600;
+  background: var(--surface-2); color: var(--text-2);
+  border-radius: 999px; padding: 7px 12px;
+}
+
+.cue { font-weight: 600; color: var(--text); }
+.nudge-tiny { display: block; margin-top: 6px; font-size: 0.82rem; color: var(--text-2); }
+
 /* Progressive disclosure */
 
 .disclose {

@@ -841,6 +841,47 @@ const EXAMPLES = {
   stretch: ["The full routine ×3", "Reach-ups", "Reach-downs", "Twists", "Bar hang", "Yoga"],
 };
 
+/* ─── Two-minute versions ───
+   The scaled-down form of each action, small enough that "I don't have
+   time" and "I can't face it" both stop being true. A habit has to exist
+   before it can grow, and this is the version that survives a bad day. */
+
+const TINY = {
+  flow: "Open the document and write one sentence.",
+  discipline: "Straighten your pillow.",
+  phonefast: "Leave your phone in another room for ten minutes.",
+  coldwater: "Ten seconds of cold at the end.",
+  pursuit: "Step outside and ask the question once.",
+
+  contribution: "Send one message that helps someone.",
+  touch: "One proper hug.",
+  social: "Send one voice note.",
+  gratitude: "Name one thing. Out loud.",
+  achievements: "Name one thing you did today.",
+
+  nature: "Stand outside and count three colours.",
+  sunlight: "Two minutes outside, no phone.",
+  guthealth: "One glass of water.",
+  underthink: "Three slow breaths, longer out than in.",
+  deepsleep: "Put your phone on the other side of the room.",
+
+  exercise: "Shoes on, walk to the end of the road.",
+  heat: "Finish your shower hotter than usual.",
+  music: "One song, sung out loud.",
+  laughter: "Watch one thing that makes you laugh.",
+  stretch: "One round: reach up, reach down, twist.",
+};
+
+/* ─── Anchors ───
+   Suggested existing habits to attach a new one to. Stacking onto
+   something already automatic beats relying on remembering.          */
+
+const ANCHORS = {
+  morning: ["I wake up", "I make my bed", "I brush my teeth", "I make my coffee", "I get dressed"],
+  midday:  ["I finish lunch", "I close my laptop", "I get back to my desk", "I take a break"],
+  evening: ["I finish dinner", "I get home", "I put my phone down", "I get into bed"],
+};
+
 /* ─── Reflection questions ───
    The book's own way of helping you decide which action to take
    forward. Shown at the foot of each action sheet, next to the
