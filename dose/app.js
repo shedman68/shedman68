@@ -29,14 +29,12 @@ function load() {
       const s = JSON.parse(raw);
       if (s && s.checks && s.chosen) {
         if (!s.details) s.details = {};  // v2: which examples were ticked
-        if (!s.recipes) s.recipes = {};  // v3: habit anchors per action
         s.v = SCHEMA;
         return s;
       }
     }
   } catch (e) { /* corrupted storage — start fresh */ }
-  return { v: SCHEMA, chosen: { ...DEFAULT_CHOSEN }, checks: {},
-           details: {}, recipes: {}, onboarded: false };
+  return { v: SCHEMA, chosen: { ...DEFAULT_CHOSEN }, checks: {}, details: {}, onboarded: false };
 }
 
 function save() {
@@ -264,19 +262,99 @@ function renderNudge() {
 }
 
 function renderInsight() {
-  const el = $("insight");
+  const el = $("insightBtn");
   const bite = todaysInsight();
   if (!bite) { el.classList.add("hidden"); return; }
-  el.className = `insight card c-${bite.chem}`;
-  el.innerHTML = `
-    <div class="insight-label">
-      <span class="dot c-${bite.chem}"></span>Today's insight · ${CHEMS[bite.chem].name}
-    </div>
-    <div class="insight-title">${bite.title}</div>
-    <p class="insight-body">${bite.body}</p>
-    <button class="learn-link" data-learn="${bite.from}" data-chem="${bite.chem}">
-      ${bite.from === "chem" ? `More on ${CHEMS[bite.chem].name}` : `More on ${byId[bite.from].title}`} →
-    </button>`;
+  el.classList.remove("hidden");
+  el.className = `insight-btn c-${bite.chem}`;
+  el.innerHTML = `<span class="dot c-${bite.chem}"></span>
+    <span class="ib-label">Today's insight</span>
+    <span class="ib-title">${bite.title}</span>
+    <span class="ib-chev">›</span>`;
+}
+
+function openInsightSheet() {
+  const bite = todaysInsight();
+  if (!bite) return;
+  openSheet(`
+    ${sheetHead(`Today's insight · ${CHEMS[bite.chem].name}`, bite.title, CHEM_COLORS[bite.chem])}
+    <p class="insight-read">${bite.body}</p>
+    <div class="sheet-cta">
+      <button class="btn-small" data-learn="${bite.from}" data-chem="${bite.chem}">
+        ${bite.from === "chem" ? `More on ${CHEMS[bite.chem].name}` : `More on ${byId[bite.from].title}`}
+      </button>
+      <button class="btn-primary" data-close>Got it</button>
+    </div>`);
+}
+
+/* ─── "How are you feeling?" — the way in ─── */
+
+let feelPick = null;
+
+function openFeelSheet(picked) {
+  feelPick = picked;
+  let body = sheetHead("Start here", "How are you feeling?", "");
+
+  body += `
+    <p class="sheet-lead">Pick whatever is closest. There's no wrong answer, and
+      you don't need to know any of the chemistry — that's the app's job.</p>
+    <div class="ex-grid">
+      ${FEELINGS.map(f => `
+        <button class="ex c-${f.chem} ${picked === f.word ? "on" : ""}"
+          data-feel="${f.word}">${f.word}</button>`).join("")}
+      <button class="ex ${picked === "ok" ? "on" : ""} feel-ok" data-feel="ok">Actually, fine</button>
+    </div>`;
+
+  if (picked === "ok") {
+    body += `
+      <div class="diagnosis">
+        <div class="diag-line">Good. Then pick whatever appeals.</div>
+        <p class="diag-why">A decent day is the best time to do the thing you'd struggle
+          to face on a bad one. Your four are below.</p>
+      </div>
+      ${suggestionList(Object.values(state.chosen).map(id => byId[id]))}`;
+  } else if (picked) {
+    const chem = FEELINGS.find(f => f.word === picked).chem;
+    const d = DIAGNOSIS[chem];
+    body += `
+      <div class="diagnosis c-${chem}">
+        <div class="diag-line">${d.line}</div>
+        <p class="diag-why">${d.why}</p>
+      </div>
+      <div class="section-label">What tends to help</div>
+      ${suggestionList(suggestFor(chem))}`;
+  }
+
+  body += `<div class="sheet-cta"><button class="btn-primary" data-close>Close</button></div>`;
+  openSheet(body, Boolean(picked));
+}
+
+/* three actions for a chemical, favouring ones that suit the time of day
+   and ones you haven't already done today */
+function suggestFor(chem) {
+  const slot = defaultTab();
+  return ACTIONS
+    .filter(a => a.chem === chem)
+    .sort((a, b) => {
+      const score = x => (isChecked(x.id) ? 4 : 0) + (x.time === slot ? 0 : 1);
+      return score(a) - score(b);
+    })
+    .slice(0, 3);
+}
+
+function suggestionList(list) {
+  return `<div class="mini-list">` + list.map(a => `
+    <div class="suggest ${isChecked(a.id) ? "done" : ""}">
+      <button class="suggest-main" data-learn="${a.id}">
+        <span class="mini-emoji">${a.emoji}</span>
+        <span class="mini-main">
+          <span class="mini-title">${a.title}</span>
+          <span class="mini-sub">${TINY[a.id]}</span>
+        </span>
+      </button>
+      <button class="check" data-toggle="${a.id}"
+        aria-label="Mark ${a.title} done">✓</button>
+    </div>`).join("") + `</div>`;
 }
 
 function renderTabs() {
@@ -317,9 +395,7 @@ function renderActions() {
           aria-label="${checked ? "Undo" : "Mark done"} — ${a.title}">✓</button>
       </div>
       <div class="action-desc" data-learn="${a.id}">
-        ${!checked && chosen && state.recipes[a.id]
-          ? `<span class="cue">↳ After ${state.recipes[a.id]}</span>`
-          : a.short}
+        ${a.short}
         ${detail.length ? `<div class="action-picked">${detail.map(d => `<span>${d}</span>`).join("")}</div>` : ""}
       </div>
     </div>`;
@@ -456,7 +532,10 @@ function openSheet(html, keepScroll) {
   $("sheet").scrollTop = top;
 }
 
-function closeSheet() { $("sheetBackdrop").classList.add("hidden"); }
+function closeSheet() {
+  $("sheetBackdrop").classList.add("hidden");
+  feelPick = null;
+}
 
 function sheetHead(kicker, title, color) {
   return `
@@ -527,35 +606,6 @@ function actionRows(chem) {
 }
 
 const TIME_LABEL = { morning: "☀️ Morning", midday: "🌤 Midday", evening: "🌙 Evening" };
-
-/* ── Habit recipe ──
-   An implementation intention: "after X, I will Y". Deciding in advance
-   when and where a behaviour happens is far more effective than deciding
-   to want it more — and stacking onto something already automatic beats
-   relying on memory. Only offered for your four chosen actions: those are
-   the habits you're actually building. */
-
-const isChosenAction = id => Object.values(state.chosen).includes(id);
-
-function habitRecipe(a) {
-  const anchor = state.recipes[a.id] || "";
-  return `
-    <div class="recipe c-${a.chem}">
-      <div class="recipe-label">Make it automatic</div>
-      <div class="recipe-line">
-        After <input class="recipe-input" data-recipe="${a.id}"
-          value="${anchor.replace(/"/g, "&quot;")}"
-          placeholder="${ANCHORS[a.time][0].toLowerCase()}">,
-        I'll do this.
-      </div>
-      ${anchor ? "" : `
-        <div class="recipe-chips">
-          ${ANCHORS[a.time].map(s => `
-            <button class="recipe-chip" data-anchor="${a.id}"
-              data-anchorval="${s.replace(/"/g, "&quot;")}">${s}</button>`).join("")}
-        </div>`}
-    </div>`;
-}
 
 /* ── Movement figures ──
    Simple line-art poses drawn in currentColor so they inherit the
@@ -628,9 +678,19 @@ function openActionSheet(id, keepScroll, openDeep) {
   const weekCount = countThisWeek(id);
 
   /* ── the part you actually use each day ── */
+  /* the single most useful reason, up front — the rest stays collapsed */
+  const hook = L && L.bites && L.bites[0];
+
   let body = `
     ${sheetHead(`${chem.name} · ${TIME_LABEL[a.time]}`, `${a.emoji} ${a.title}`, color)}
     <p class="sheet-lead">${a.short}</p>
+
+    ${hook ? `
+      <div class="why c-${a.chem}">
+        <div class="why-label">Why this one</div>
+        <div class="why-title">${hook.title}</div>
+        <p class="why-body">${hook.body}</p>
+      </div>` : ""}
 
     <div class="section-label">What did you do?</div>
     <div class="ex-grid">
@@ -651,9 +711,7 @@ function openActionSheet(id, keepScroll, openDeep) {
         <div class="tiny-label">Short on time or energy?</div>
         <div class="tiny-body">${TINY[id]}</div>
         <button class="tiny-btn c-${a.chem}" data-tiny="${id}">That'll do — mark it done</button>
-      </div>` : ""}
-
-    ${isChosenAction(id) ? habitRecipe(a) : ""}`;
+      </div>` : ""}`;
 
   /* ── everything below is optional reading ── */
   body += `
@@ -666,8 +724,8 @@ function openActionSheet(id, keepScroll, openDeep) {
     return openSheet(body, keepScroll);
   }
 
-  if (L && L.bites) {
-    body += `<div class="section-label">Why it works</div>${biteCards(L.bites, a.chem)}`;
+  if (L && L.bites && L.bites.length > 1) {
+    body += `<div class="section-label">More on why</div>${biteCards(L.bites.slice(1), a.chem)}`;
   }
 
   if (L && L.steps) {
@@ -998,7 +1056,15 @@ function showView(name) {
 
 document.addEventListener("click", e => {
   const toggle = e.target.closest("[data-toggle]");
-  if (toggle) return toggleAction(toggle.dataset.toggle);
+  if (toggle) {
+    toggleAction(toggle.dataset.toggle);
+    // if we're ticking from inside the feeling sheet, keep it in sync
+    if (feelPick && !$("sheetBackdrop").classList.contains("hidden")) openFeelSheet(feelPick);
+    return;
+  }
+
+  const feel = e.target.closest("[data-feel]");
+  if (feel) return openFeelSheet(feel.dataset.feel);
 
   const ex = e.target.closest("[data-ex]");
   if (ex) return toggleExample(ex.dataset.ex, ex.dataset.exval);
@@ -1009,15 +1075,6 @@ document.addEventListener("click", e => {
     if (!isChecked(id)) toggleAction(id);
     renderToday();
     return openActionSheet(id, true, document.querySelector(".disclose.open") !== null);
-  }
-
-  const anchor = e.target.closest("[data-anchor]");
-  if (anchor) {
-    state.recipes[anchor.dataset.anchor] = anchor.dataset.anchorval;
-    save();
-    renderToday();
-    return openActionSheet(anchor.dataset.anchor, true,
-      document.querySelector(".disclose.open") !== null);
   }
 
   const doneBtn = e.target.closest("[data-done]");
@@ -1078,15 +1135,6 @@ document.addEventListener("click", e => {
 document.addEventListener("change", e => {
   if (e.target.closest(".rem-input")) return saveReminderTimes();
 
-  const recipe = e.target.closest("[data-recipe]");
-  if (recipe) {
-    const v = recipe.value.trim();
-    if (v) state.recipes[recipe.dataset.recipe] = v;
-    else delete state.recipes[recipe.dataset.recipe];
-    save();
-    return renderToday();
-  }
-
   const sel = e.target.closest("[data-chem-select]");
   if (sel) {
     state.chosen[sel.dataset.chemSelect] = sel.value;
@@ -1098,6 +1146,9 @@ document.addEventListener("change", e => {
 document.querySelectorAll(".tab").forEach(tab => {
   tab.addEventListener("click", () => { currentTab = tab.dataset.time; renderTabs(); renderActions(); });
 });
+
+$("feelBtn").addEventListener("click", () => openFeelSheet(null));
+$("insightBtn").addEventListener("click", openInsightSheet);
 
 $("navToday").addEventListener("click", () => showView("today"));
 $("navPatterns").addEventListener("click", () => showView("patterns"));

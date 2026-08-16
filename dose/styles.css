@@ -591,57 +591,95 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
 .tiny-btn.c-d { background: var(--d); } .tiny-btn.c-o { background: var(--o); }
 .tiny-btn.c-s { background: var(--s); } .tiny-btn.c-e { background: var(--e); }
 
-/* Habit recipe */
+/* Insight, behind a button */
 
-.recipe {
-  margin-top: 16px; padding: 15px 16px;
-  background: var(--surface); border: 1px solid var(--line);
-  border-left: 3px solid var(--line); border-radius: 15px;
-}
-.recipe.c-d { border-left-color: var(--d); } .recipe.c-o { border-left-color: var(--o); }
-.recipe.c-s { border-left-color: var(--s); } .recipe.c-e { border-left-color: var(--e); }
-
-.recipe-label {
-  font-size: 0.66rem; font-weight: 800; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--text-2); margin-bottom: 8px;
-}
-.recipe-line { font-size: 0.95rem; font-weight: 600; line-height: 1.7; }
-.recipe-input {
-  font: inherit; font-weight: 700;
-  color: var(--text); background: var(--surface-2);
-  border: none; border-radius: 8px;
-  padding: 3px 9px; min-width: 130px; max-width: 100%;
-}
-.recipe-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 11px; }
-.recipe-chip {
-  font-size: 0.78rem; font-weight: 600;
-  background: var(--surface-2); color: var(--text-2);
-  border-radius: 999px; padding: 7px 12px;
-}
-
-.cue { font-weight: 600; color: var(--text); }
-.nudge-tiny { display: block; margin-top: 6px; font-size: 0.82rem; color: var(--text-2); }
-
-/* Progressive disclosure */
-
-.disclose {
+.insight-btn {
   width: 100%;
-  display: flex; align-items: center; justify-content: center; gap: 7px;
-  margin-top: 20px; padding: 13px;
-  font-size: 0.88rem; font-weight: 700;
-  color: var(--text-2);
-  border-top: 1px solid var(--line);
+  display: flex; align-items: center; gap: 9px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-left: 3px solid var(--line);
+  border-radius: 14px; padding: 12px 14px;
+  box-shadow: var(--shadow);
+  margin-bottom: 12px; text-align: left;
 }
-.disclose .chev { font-size: 0.65rem; }
+.insight-btn.c-d { border-left-color: var(--d); }
+.insight-btn.c-o { border-left-color: var(--o); }
+.insight-btn.c-s { border-left-color: var(--s); }
+.insight-btn.c-e { border-left-color: var(--e); }
 
-/* Examples echoed on the daily card */
-
-.action-picked { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
-.action-picked span {
-  font-size: 0.72rem; font-weight: 700;
-  background: var(--surface-2); color: var(--text-2);
-  border-radius: 999px; padding: 3px 9px;
+.ib-label {
+  font-size: 0.66rem; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-2); flex-shrink: 0;
 }
+.ib-title {
+  flex: 1; min-width: 0; font-size: 0.86rem; font-weight: 700;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ib-chev { color: var(--text-2); font-size: 1.15rem; }
+
+.insight-read { font-size: 0.95rem; line-height: 1.65; color: var(--text-2); }
+
+/* "How are you feeling?" — the way in */
+
+.feel-btn {
+  width: 100%; text-align: left;
+  display: flex; flex-direction: column; gap: 3px;
+  padding: 16px 18px; margin-bottom: 14px;
+  border-radius: var(--radius);
+  border: 1.5px dashed color-mix(in srgb, var(--text-2) 40%, transparent);
+  background: var(--surface);
+  transition: transform 0.12s ease;
+}
+.feel-btn:active { transform: scale(0.99); }
+.feel-q { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; }
+.feel-sub { font-size: 0.82rem; color: var(--text-2); }
+
+.feel-ok { border-style: dashed !important; }
+
+.diagnosis {
+  margin: 4px 0 18px; padding: 15px 17px;
+  background: var(--surface-2); border-radius: 15px;
+  border-left: 3px solid var(--line);
+}
+.diagnosis.c-d { border-left-color: var(--d); }
+.diagnosis.c-o { border-left-color: var(--o); }
+.diagnosis.c-s { border-left-color: var(--s); }
+.diagnosis.c-e { border-left-color: var(--e); }
+
+.diag-line { font-weight: 700; font-size: 1rem; margin-bottom: 6px; }
+.diag-why { font-size: 0.87rem; color: var(--text-2); line-height: 1.6; }
+
+.suggest {
+  display: flex; align-items: center; padding-right: 12px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.suggest.done { opacity: 0.6; }
+.suggest.done .check { background: var(--check); border-color: var(--check); color: #fff; }
+.suggest-main {
+  flex: 1; min-width: 0;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 6px 12px 14px; text-align: left;
+}
+
+/* Why this one — the guidance, up front */
+
+.why {
+  margin: 4px 0 20px; padding: 14px 16px;
+  background: var(--surface-2); border-radius: 15px;
+  border-left: 3px solid var(--line);
+}
+.why.c-d { border-left-color: var(--d); } .why.c-o { border-left-color: var(--o); }
+.why.c-s { border-left-color: var(--s); } .why.c-e { border-left-color: var(--e); }
+
+.why-label {
+  font-size: 0.64rem; font-weight: 800; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--text-2); margin-bottom: 6px;
+}
+.why-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 5px; }
+.why-body { font-size: 0.86rem; color: var(--text-2); line-height: 1.6; }
+
+.nudge-tiny { display: block; margin-top: 6px; font-size: 0.82rem; color: var(--text-2); }
 
 /* ═══ Sheet content ═══ */
 

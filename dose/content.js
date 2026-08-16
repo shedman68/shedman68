@@ -872,14 +872,41 @@ const TINY = {
   stretch: "One round: reach up, reach down, twist.",
 };
 
-/* ─── Anchors ───
-   Suggested existing habits to attach a new one to. Stacking onto
-   something already automatic beats relying on remembering.          */
+/* ─── Feeling → chemical ───
+   The book's low-state symptoms, turned into a way in. You start from
+   how you actually feel, not from a category — and the app does the
+   translating. This is the decision aid the checklist can't be.      */
 
-const ANCHORS = {
-  morning: ["I wake up", "I make my bed", "I brush my teeth", "I make my coffee", "I get dressed"],
-  midday:  ["I finish lunch", "I close my laptop", "I get back to my desk", "I take a break"],
-  evening: ["I finish dinner", "I get home", "I put my phone down", "I get into bed"],
+const FEELINGS = [
+  { word: "Demotivated", chem: "d" },
+  { word: "Distracted",  chem: "d" },
+  { word: "Flat",        chem: "d" },
+  { word: "Lonely",      chem: "o" },
+  { word: "Unconfident", chem: "o" },
+  { word: "Anxious",     chem: "s" },
+  { word: "Tired",       chem: "s" },
+  { word: "Stressed",    chem: "e" },
+  { word: "Angry",       chem: "e" },
+];
+
+/* what the app says once you've named it */
+const DIAGNOSIS = {
+  d: {
+    line: "That's usually dopamine running low.",
+    why: "Drive drains when the quick, effortless hits have been doing the work. What rebuilds it is effort — something that costs you a little.",
+  },
+  o: {
+    line: "That's usually oxytocin running low.",
+    why: "Connection is asking for attention — either with other people, or with how you've been talking to yourself. Both count.",
+  },
+  s: {
+    line: "That's usually serotonin running low.",
+    why: "Mood and energy are the same dial, and it's built mostly in your body — through light, food, movement and sleep rather than through thinking.",
+  },
+  e: {
+    line: "That's usually endorphins running low.",
+    why: "This is your built-in stress release, and it's the one chemical that won't be talked into existence. It wants actual physical exertion.",
+  },
 };
 
 /* ─── Reflection questions ───
