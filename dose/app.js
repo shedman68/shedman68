@@ -344,17 +344,14 @@ function suggestFor(chem) {
 
 function suggestionList(list) {
   return `<div class="mini-list">` + list.map(a => `
-    <div class="suggest ${isChecked(a.id) ? "done" : ""}">
-      <button class="suggest-main" data-learn="${a.id}">
-        <span class="mini-emoji">${a.emoji}</span>
-        <span class="mini-main">
-          <span class="mini-title">${a.title}</span>
-          <span class="mini-sub">${TINY[a.id]}</span>
-        </span>
-      </button>
-      <button class="check" data-toggle="${a.id}"
-        aria-label="Mark ${a.title} done">✓</button>
-    </div>`).join("") + `</div>`;
+    <button class="suggest ${isChecked(a.id) ? "done" : ""}" data-learn="${a.id}">
+      <span class="mini-emoji">${a.emoji}</span>
+      <span class="mini-main">
+        <span class="mini-title">${a.title}</span>
+        <span class="mini-sub">${TINY[a.id]}</span>
+      </span>
+      <span class="action-state">${isChecked(a.id) ? "✓" : "›"}</span>
+    </button>`).join("") + `</div>`;
 }
 
 function renderTabs() {
@@ -378,27 +375,25 @@ function renderActions() {
     const checked = isChecked(a.id);
     const detail = todayDetails(a.id);
     return `
-    <div class="action ${checked ? "checked" : ""}">
-      <div class="action-head">
-        <button class="action-row" data-learn="${a.id}">
-          <span class="action-emoji">${a.emoji}</span>
-          <span class="action-main">
-            <span class="action-title">${a.title}${chosen ? '<span class="star">⭐</span>' : ""}</span>
-            <span class="action-meta">
-              <span class="tag c-${a.chem}">${CHEMS[a.chem].letter}</span>
-              <span class="action-hint">${CHEMS[a.chem].name}${chosen ? " · your pick" : ""}</span>
-            </span>
+    <button class="action ${checked ? "checked" : ""}" data-learn="${a.id}">
+      <span class="action-head">
+        <span class="action-emoji">${a.emoji}</span>
+        <span class="action-main">
+          <span class="action-title">${a.title}${chosen ? '<span class="star">⭐</span>' : ""}</span>
+          <span class="action-meta">
+            <span class="tag c-${a.chem}">${CHEMS[a.chem].letter}</span>
+            <span class="gives c-${a.chem}">${GIVES[a.id]}</span>
           </span>
-          <span class="row-chev">›</span>
-        </button>
-        <button class="check" data-toggle="${a.id}" aria-pressed="${checked}"
-          aria-label="${checked ? "Undo" : "Mark done"} — ${a.title}">✓</button>
-      </div>
-      <div class="action-desc" data-learn="${a.id}">
-        ${a.short}
-        ${detail.length ? `<div class="action-picked">${detail.map(d => `<span>${d}</span>`).join("")}</div>` : ""}
-      </div>
-    </div>`;
+        </span>
+        <span class="action-state">${checked ? "✓" : "›"}</span>
+      </span>
+
+      <span class="action-desc">${a.short}</span>
+
+      ${detail.length
+        ? `<span class="action-picked">${detail.map(d => `<span>${d}</span>`).join("")}</span>`
+        : `<span class="action-cta c-${a.chem}">See what counts →</span>`}
+    </button>`;
   }).join("");
 }
 
@@ -678,19 +673,22 @@ function openActionSheet(id, keepScroll, openDeep) {
   const weekCount = countThisWeek(id);
 
   /* ── the part you actually use each day ── */
-  /* the single most useful reason, up front — the rest stays collapsed */
-  const hook = L && L.bites && L.bites[0];
+  /* Why is always visible — it's what you need in order to choose.
+     How-to detail stays behind the disclosure. */
+  const why = (L && L.bites) || [];
 
   let body = `
     ${sheetHead(`${chem.name} · ${TIME_LABEL[a.time]}`, `${a.emoji} ${a.title}`, color)}
     <p class="sheet-lead">${a.short}</p>
+    <div class="gives-big c-${a.chem}">Gives you: ${GIVES[id]}</div>
 
-    ${hook ? `
-      <div class="why c-${a.chem}">
-        <div class="why-label">Why this one</div>
-        <div class="why-title">${hook.title}</div>
-        <p class="why-body">${hook.body}</p>
-      </div>` : ""}
+    ${why.length ? `
+      <div class="section-label">Why this one</div>
+      ${why.map(b => `
+        <div class="why c-${a.chem}">
+          <div class="why-title">${b.title}</div>
+          <p class="why-body">${b.body}</p>
+        </div>`).join("")}` : ""}
 
     <div class="section-label">What did you do?</div>
     <div class="ex-grid">
@@ -714,18 +712,18 @@ function openActionSheet(id, keepScroll, openDeep) {
       </div>` : ""}`;
 
   /* ── everything below is optional reading ── */
-  body += `
-    <button class="disclose ${openDeep ? "open" : ""}" data-deep="${id}">
-      ${openDeep ? "Hide the detail" : "Why it works, and how"} <span class="chev">${openDeep ? "▲" : "▼"}</span>
-    </button>`;
+  const hasHow = L && (L.steps || L.movements || L.list || L.groups || L.challenge || L.prompt);
+
+  if (hasHow) {
+    body += `
+      <button class="disclose ${openDeep ? "open" : ""}" data-deep="${id}">
+        ${openDeep ? "Hide how to do it" : "How to do it"} <span class="chev">${openDeep ? "▲" : "▼"}</span>
+      </button>`;
+  }
 
   if (!openDeep) {
     body += `<div class="sheet-cta"><button class="btn-primary" data-close>Close</button></div>`;
     return openSheet(body, keepScroll);
-  }
-
-  if (L && L.bites && L.bites.length > 1) {
-    body += `<div class="section-label">More on why</div>${biteCards(L.bites.slice(1), a.chem)}`;
   }
 
   if (L && L.steps) {

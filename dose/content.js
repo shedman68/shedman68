@@ -841,6 +841,37 @@ const EXAMPLES = {
   stretch: ["The full routine ×3", "Reach-ups", "Reach-downs", "Twists", "Bar hang", "Yoga"],
 };
 
+/* ─── What each one gives you ───
+   A few words on the effect, not the activity. When you're scanning the
+   list deciding what to do, "quiets comparison" is far more useful than
+   a definition of gratitude.                                          */
+
+const GIVES = {
+  flow: "Deep focus",
+  discipline: "A clearer head",
+  phonefast: "Your attention back",
+  coldwater: "Energy and drive",
+  pursuit: "Direction",
+
+  contribution: "Feeling useful",
+  touch: "Settles your system",
+  social: "Real connection",
+  gratitude: "Quiets comparison",
+  achievements: "Self-belief",
+
+  nature: "Calm and perspective",
+  sunlight: "Sets your body clock",
+  guthealth: "Steady energy",
+  underthink: "A quieter mind",
+  deepsleep: "Tomorrow's mood",
+
+  exercise: "Stress cleared",
+  heat: "Tension released",
+  music: "Lifts you fast",
+  laughter: "Total presence",
+  stretch: "Loosens you up",
+};
+
 /* ─── Two-minute versions ───
    The scaled-down form of each action, small enough that "I don't have
    time" and "I can't face it" both stop being true. A habit has to exist

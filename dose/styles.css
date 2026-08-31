@@ -166,31 +166,24 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
 }
 .tab.active { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
 
-/* ═══ Action cards ═══ */
+/* ═══ Action cards ═══
+   The whole card is the button. No checkbox competing with it —
+   logging happens inside, against a specific example. */
 
 .action-list { display: flex; flex-direction: column; gap: 10px; }
 
 .action {
+  display: block; width: 100%; text-align: left;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  overflow: hidden;
-  transition: opacity 0.25s ease;
+  padding: 14px 16px;
+  transition: transform 0.12s ease, opacity 0.25s ease;
 }
+.action:active { transform: scale(0.985); }
 
-.action-head { display: flex; align-items: center; padding-right: 14px; }
-
-.action-row {
-  flex: 1; min-width: 0;
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px 6px 14px 16px;
-  text-align: left;
-  transition: opacity 0.15s ease;
-}
-.action-row:active { opacity: 0.6; }
-
-.row-chev { color: var(--text-2); font-size: 1.3rem; opacity: 0.5; }
+.action-head { display: flex; align-items: center; gap: 12px; }
 
 .action-emoji { font-size: 1.35rem; flex-shrink: 0; }
 
@@ -202,7 +195,7 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
 }
 .star { font-size: 0.75rem; }
 
-.action-meta { display: flex; align-items: center; gap: 6px; margin-top: 3px; }
+.action-meta { display: flex; align-items: center; gap: 7px; margin-top: 4px; }
 
 .tag {
   font-size: 0.66rem; font-weight: 800; letter-spacing: 0.06em;
@@ -213,8 +206,53 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
 .tag.c-s { background: var(--s); }
 .tag.c-e { background: var(--e); }
 
-.action-hint { font-size: 0.78rem; color: var(--text-2); }
+/* the benefit, which is what you actually choose on */
+.gives { font-size: 0.78rem; font-weight: 700; }
+.gives.c-d { color: var(--d); } .gives.c-o { color: var(--o); }
+.gives.c-s { color: var(--s); } .gives.c-e { color: var(--e); }
 
+.action-state {
+  flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem; color: var(--text-2); opacity: 0.55;
+}
+
+.action.checked { opacity: 0.72; }
+.action.checked .action-state {
+  background: var(--check); color: #fff; opacity: 1;
+  font-size: 0.95rem; font-weight: 800;
+}
+.action.checked .action-title { text-decoration: line-through; text-decoration-thickness: 1.5px; }
+
+.action-desc {
+  display: block; margin-top: 10px; padding-left: 34px;
+  font-size: 0.85rem; color: var(--text-2); line-height: 1.5;
+}
+
+/* the explicit affordance — this card opens */
+.action-cta {
+  display: block; margin-top: 9px; padding-left: 34px;
+  font-size: 0.8rem; font-weight: 700;
+}
+.action-cta.c-d { color: var(--d); } .action-cta.c-o { color: var(--o); }
+.action-cta.c-s { color: var(--s); } .action-cta.c-e { color: var(--e); }
+
+.action-picked {
+  display: flex; flex-wrap: wrap; gap: 5px;
+  margin-top: 9px; padding-left: 34px;
+}
+.action-picked span {
+  font-size: 0.72rem; font-weight: 700;
+  background: var(--surface-2); color: var(--text-2);
+  border-radius: 999px; padding: 3px 9px;
+}
+
+.footnote {
+  text-align: center; font-size: 0.72rem; color: var(--text-2);
+  margin-top: 22px; line-height: 1.5; opacity: 0.8;
+}
+
+/* the tick circle still used inside sheets */
 .check {
   width: 34px; height: 34px; border-radius: 50%;
   border: 2.5px solid var(--line);
@@ -222,24 +260,6 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
   display: flex; align-items: center; justify-content: center;
   color: transparent; font-size: 1rem; font-weight: 800;
   transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
-  background: transparent;
-}
-
-.action.checked { opacity: 0.82; }
-.action.checked .check {
-  background: var(--check); border-color: var(--check); color: #fff;
-  transform: scale(1.08);
-}
-.action.checked .action-title { text-decoration: line-through; text-decoration-thickness: 1.5px; opacity: 0.75; }
-
-.action-desc {
-  padding: 0 16px 14px 52px;
-  font-size: 0.85rem; color: var(--text-2); line-height: 1.5;
-}
-
-.footnote {
-  text-align: center; font-size: 0.72rem; color: var(--text-2);
-  margin-top: 22px; line-height: 1.5; opacity: 0.8;
 }
 
 /* ═══ Patterns ═══ */
@@ -650,32 +670,35 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
 .diag-why { font-size: 0.87rem; color: var(--text-2); line-height: 1.6; }
 
 .suggest {
-  display: flex; align-items: center; padding-right: 12px;
+  width: 100%; text-align: left;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 12px 12px 14px;
   background: var(--surface); border: 1px solid var(--line);
   border-radius: 14px;
+  transition: transform 0.12s ease;
 }
-.suggest.done { opacity: 0.6; }
-.suggest.done .check { background: var(--check); border-color: var(--check); color: #fff; }
-.suggest-main {
-  flex: 1; min-width: 0;
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px 6px 12px 14px; text-align: left;
-}
+.suggest:active { transform: scale(0.985); }
+.suggest.done { opacity: 0.62; }
+.suggest.done .action-state { background: var(--check); color: #fff; opacity: 1; font-size: 0.9rem; }
 
 /* Why this one — the guidance, up front */
 
+.gives-big {
+  display: inline-block; margin: 10px 0 4px;
+  font-size: 0.9rem; font-weight: 800;
+  padding: 7px 14px; border-radius: 999px; color: #fff;
+}
+.gives-big.c-d { background: var(--d); } .gives-big.c-o { background: var(--o); }
+.gives-big.c-s { background: var(--s); } .gives-big.c-e { background: var(--e); }
+
 .why {
-  margin: 4px 0 20px; padding: 14px 16px;
+  margin-bottom: 9px; padding: 14px 16px;
   background: var(--surface-2); border-radius: 15px;
   border-left: 3px solid var(--line);
 }
 .why.c-d { border-left-color: var(--d); } .why.c-o { border-left-color: var(--o); }
 .why.c-s { border-left-color: var(--s); } .why.c-e { border-left-color: var(--e); }
 
-.why-label {
-  font-size: 0.64rem; font-weight: 800; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--text-2); margin-bottom: 6px;
-}
 .why-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 5px; }
 .why-body { font-size: 0.86rem; color: var(--text-2); line-height: 1.6; }
 
