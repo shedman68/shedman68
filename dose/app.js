@@ -667,28 +667,16 @@ function movementBlock(m, chem) {
 
 function openActionSheet(id, keepScroll, openDeep) {
   const a = byId[id], chem = CHEMS[a.chem], color = CHEM_COLORS[a.chem];
-  const L = a.learn;
+  const L = a.learn || {};
   const picked = todayDetails(id);
   const done = isChecked(id);
   const weekCount = countThisWeek(id);
 
-  /* ── the part you actually use each day ── */
-  /* Why is always visible — it's what you need in order to choose.
-     How-to detail stays behind the disclosure. */
-  const why = (L && L.bites) || [];
-
+  /* ── 1. what it is, and the fast way to log it ── */
   let body = `
     ${sheetHead(`${chem.name} · ${TIME_LABEL[a.time]}`, `${a.emoji} ${a.title}`, color)}
     <p class="sheet-lead">${a.short}</p>
     <div class="gives-big c-${a.chem}">Gives you: ${GIVES[id]}</div>
-
-    ${why.length ? `
-      <div class="section-label">Why this one</div>
-      ${why.map(b => `
-        <div class="why c-${a.chem}">
-          <div class="why-title">${b.title}</div>
-          <p class="why-body">${b.body}</p>
-        </div>`).join("")}` : ""}
 
     <div class="section-label">What did you do?</div>
     <div class="ex-grid">
@@ -711,22 +699,9 @@ function openActionSheet(id, keepScroll, openDeep) {
         <button class="tiny-btn c-${a.chem}" data-tiny="${id}">That'll do — mark it done</button>
       </div>` : ""}`;
 
-  /* ── everything below is optional reading ── */
-  const hasHow = L && (L.steps || L.movements || L.list || L.groups || L.challenge || L.prompt);
+  /* ── 2. how to do it — visible, because it's what you act on ── */
 
-  if (hasHow) {
-    body += `
-      <button class="disclose ${openDeep ? "open" : ""}" data-deep="${id}">
-        ${openDeep ? "Hide how to do it" : "How to do it"} <span class="chev">${openDeep ? "▲" : "▼"}</span>
-      </button>`;
-  }
-
-  if (!openDeep) {
-    body += `<div class="sheet-cta"><button class="btn-primary" data-close>Close</button></div>`;
-    return openSheet(body, keepScroll);
-  }
-
-  if (L && L.steps) {
+  if (L.steps) {
     body += `<div class="section-label">${L.stepsTitle || "How to do it"}</div><div class="steps">` +
       L.steps.map((s, i) => `
         <div class="step">
@@ -738,15 +713,7 @@ function openActionSheet(id, keepScroll, openDeep) {
         </div>`).join("") + `</div>`;
   }
 
-  if (L && L.extended) {
-    const E = L.extended;
-    body += `
-      <div class="section-label">${E.title}</div>
-      <p class="extra-note">${E.note}</p>
-      ${biteCards(E.bites, a.chem)}`;
-  }
-
-  if (L && L.movements) {
+  if (L.movements) {
     for (const M of (Array.isArray(L.movements) ? L.movements : [L.movements])) {
       body += `<div class="section-label">${M.title}</div>`;
       if (M.note) body += `<p class="group-note">${M.note}</p>`;
@@ -761,7 +728,7 @@ function openActionSheet(id, keepScroll, openDeep) {
     }
   }
 
-  if (L && L.prompt) {
+  if (L.prompt) {
     const p = L.prompt;
     body += `
       <div class="prompt c-${a.chem}">
@@ -772,11 +739,7 @@ function openActionSheet(id, keepScroll, openDeep) {
       </div>`;
   }
 
-  if (L && L.quote) {
-    body += `<blockquote class="quote c-${a.chem}">“${L.quote}”</blockquote>`;
-  }
-
-  if (L && L.groups) {
+  if (L.groups) {
     body += `<div class="section-label">${L.groups.title}</div>`;
     if (L.groups.note) body += `<p class="group-note">${L.groups.note}</p>`;
     body += L.groups.sets.map(s => `
@@ -786,16 +749,42 @@ function openActionSheet(id, keepScroll, openDeep) {
       </div>`).join("");
   }
 
-  if (L && L.list) {
+  if (L.list) {
     const lists = Array.isArray(L.list) ? L.list : [L.list];
     body += lists.map(l => pillList(l.title, l.items, "", l.note)).join("");
   }
 
-  if (L && L.caution) {
-    body += `<div class="caution">${L.caution}</div>`;
+  if (L.caution) body += `<div class="caution">${L.caution}</div>`;
+
+  /* ── 3. why it works — folded away, read when you want to ── */
+
+  const why = L.bites || [];
+  const hasWhy = why.length || L.extended || L.quote || L.challenge || REFLECT[id];
+
+  if (hasWhy) {
+    body += `
+      <button class="disclose ${openDeep ? "open" : ""}" data-deep="${id}">
+        ${openDeep ? "Hide why this works" : "Why this works"} <span class="chev">${openDeep ? "▲" : "▼"}</span>
+      </button>`;
   }
 
-  if (L && L.challenge) {
+  if (!openDeep) {
+    body += `<div class="sheet-cta">${chooseCta(a, chem)}</div>`;
+    return openSheet(body, keepScroll);
+  }
+
+  if (why.length) body += biteCards(why, a.chem);
+
+  if (L.extended) {
+    body += `
+      <div class="section-label">${L.extended.title}</div>
+      <p class="extra-note">${L.extended.note}</p>
+      ${biteCards(L.extended.bites, a.chem)}`;
+  }
+
+  if (L.quote) body += `<blockquote class="quote c-${a.chem}">“${L.quote}”</blockquote>`;
+
+  if (L.challenge) {
     const list = Array.isArray(L.challenge) ? L.challenge : [L.challenge];
     body += list.map(c => `
       <div class="challenge c-${a.chem}">
@@ -806,27 +795,26 @@ function openActionSheet(id, keepScroll, openDeep) {
       </div>`).join("");
   }
 
-  if (!L) body += `<p class="sheet-sub">More detail on this action is being added.</p>`;
-
-  const isChosen = state.chosen[a.chem] === a.id;
-
-  if (REFLECT[a.id]) {
+  if (REFLECT[id]) {
     body += `
       <div class="reflect c-${a.chem}">
         <div class="reflect-label">Is this your one?</div>
-        <p class="reflect-body">${REFLECT[a.id]}</p>
+        <p class="reflect-body">${REFLECT[id]}</p>
       </div>`;
   }
 
-  body += `
-    <div class="sheet-cta">
-      ${isChosen
-        ? `<div class="chosen-note">⭐ This is your daily ${chem.name.toLowerCase()} action.</div>`
-        : `<button class="btn-small" data-choose="${a.id}">Make this my ${chem.name.toLowerCase()} action</button>`}
-      <button class="btn-primary" data-close>Got it</button>
-    </div>`;
-
+  body += `<div class="sheet-cta">${chooseCta(a, chem)}</div>`;
   openSheet(body, keepScroll);
+}
+
+/* the pick-this / close pair at the foot of an action sheet */
+function chooseCta(a, chem) {
+  const isChosen = state.chosen[a.chem] === a.id;
+  return `
+    ${isChosen
+      ? `<div class="chosen-note">⭐ This is your daily ${chem.name.toLowerCase()} action.</div>`
+      : `<button class="btn-small" data-choose="${a.id}">Make this my ${chem.name.toLowerCase()} action</button>`}
+    <button class="btn-primary" data-close>Got it</button>`;
 }
 
 /* ticking an example records the detail and marks the action done;
