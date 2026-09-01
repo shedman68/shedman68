@@ -687,7 +687,8 @@ const ACTIONS = [
           { name: "Strengthening", items: ["Lifting weights", "Bodyweight training", "Resistance bands"] },
           { name: "Endurance", items: ["Walking", "Running", "Cycling", "Swimming",
               "Gym classes", "Martial arts", "Sport"] },
-          { name: "Staying motivated", items: ["Competitions", "Smart decisions"] },
+          { name: "Staying motivated", reference: true,
+            items: ["Competitions", "Smart decisions"] },
         ],
       },
       challenge: {

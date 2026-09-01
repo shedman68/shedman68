@@ -668,6 +668,12 @@ function movementBlock(m, chem) {
 let openWhy = null;   // which "why" chunk is expanded
 let whyFor = null;    // and which action it belongs to
 
+/* one selectable chip — tapping it logs what you did */
+function chip(id, chem, x, picked) {
+  return `<button class="ex c-${chem} ${picked.includes(x) ? "on" : ""} ${x === flashEx ? "just" : ""}"
+    data-ex="${id}" data-exval="${x.replace(/"/g, "&quot;")}">${x}</button>`;
+}
+
 function openActionSheet(id, keepScroll) {
   const a = byId[id], chem = CHEMS[a.chem], color = CHEM_COLORS[a.chem];
   const L = a.learn || {};
@@ -677,11 +683,20 @@ function openActionSheet(id, keepScroll) {
 
   if (whyFor !== id) { openWhy = null; whyFor = id; }
 
+  /* The options under "how to do it" are the log. Where an action lists
+     ways to do it, those become the tappable set; otherwise its plain
+     examples do. Either way there is exactly one place to record. */
+  const liveSets = (L.groups ? L.groups.sets.filter(s => !s.reference) : []);
+  const refSets  = (L.groups ? L.groups.sets.filter(s => s.reference) : []);
+  const flat     = liveSets.length ? [] : (EXAMPLES[id] || []);
+  const offered  = liveSets.length ? liveSets.flatMap(s => s.items) : flat;
+  const orphans  = picked.filter(p => !offered.includes(p));
+
   let body = `
     ${sheetHead(`${chem.name} · ${TIME_LABEL[a.time]}`, `${a.emoji} ${a.title}`, color)}
     <p class="sheet-lead">${a.short}</p>`;
 
-  /* ── 1. how to do it ── */
+  /* ── how to do it ── */
 
   if (L.steps) {
     body += `<div class="section-label">${L.stepsTitle || "How to do it"}</div><div class="steps">` +
@@ -721,13 +736,38 @@ function openActionSheet(id, keepScroll) {
       </div>`;
   }
 
-  if (L.groups) {
-    body += `<div class="section-label">${L.groups.title}</div>`;
-    if (L.groups.note) body += `<p class="group-note">${L.groups.note}</p>`;
-    body += L.groups.sets.map(s => `
+  /* ── the options, which are also the log ── */
+
+  body += `<div class="section-label">${liveSets.length ? L.groups.title : "Ways to do it"}</div>
+    <p class="group-note">Tap whatever you managed — that's how it gets logged. Even the smallest one counts.</p>`;
+
+  if (liveSets.length) {
+    body += liveSets.map(set => `
       <div class="group-block">
-        <div class="group-name c-${a.chem}">${s.name}</div>
-        <div class="pills">${s.items.map(i => `<span class="pill">${i}</span>`).join("")}</div>
+        <div class="group-name c-${a.chem}">${set.name}</div>
+        <div class="ex-grid">${set.items.map(x => chip(id, a.chem, x, picked)).join("")}</div>
+      </div>`).join("");
+  } else {
+    body += `<div class="ex-grid">${flat.map(x => chip(id, a.chem, x, picked)).join("")}</div>`;
+  }
+
+  /* anything logged earlier that the current options no longer offer,
+     so it stays visible and can still be un-ticked */
+  if (orphans.length) {
+    body += `<div class="ex-grid">${orphans.map(x => chip(id, a.chem, x, picked)).join("")}</div>`;
+  }
+
+  body += done && weekCount > 1
+    ? `<p class="competence">✓ Logged — that's your ${ORDINAL[weekCount] || weekCount + "th"} this week.</p>`
+    : done ? `<p class="competence">✓ Logged for today.</p>` : "";
+
+  /* ── reference material ── */
+
+  if (refSets.length) {
+    body += refSets.map(set => `
+      <div class="group-block">
+        <div class="group-name c-${a.chem}">${set.name}</div>
+        <div class="pills">${set.items.map(i => `<span class="pill">${i}</span>`).join("")}</div>
       </div>`).join("");
   }
 
@@ -738,21 +778,7 @@ function openActionSheet(id, keepScroll) {
 
   if (L.caution) body += `<div class="caution">${L.caution}</div>`;
 
-  /* ── 2. log it — ticking an example is the whole interaction ── */
-
-  body += `
-    <div class="section-label">What did you do?</div>
-    <p class="group-note">Tap whatever you managed. Even the smallest one counts.</p>
-    <div class="ex-grid">
-      ${(EXAMPLES[id] || []).map(x => `
-        <button class="ex c-${a.chem} ${picked.includes(x) ? "on" : ""} ${x === flashEx ? "just" : ""}"
-          data-ex="${id}" data-exval="${x.replace(/"/g, "&quot;")}">${x}</button>`).join("")}
-    </div>
-    ${done && weekCount > 1
-      ? `<p class="competence">✓ Logged — that's your ${ORDINAL[weekCount] || weekCount + "th"} this week.</p>`
-      : done ? `<p class="competence">✓ Logged for today.</p>` : ""}`;
-
-  /* ── 3. why it works, in chunks you can open one at a time ── */
+  /* ── why it works, in chunks ── */
 
   const why = L.bites || [];
 
