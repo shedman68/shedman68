@@ -156,7 +156,7 @@ const ACTIONS = [
       ],
       groups: {
         title: "Find something you love",
-        note: "Flow needs an activity worth entering. Experiment until one of these genuinely pulls you in.",
+        note: "Experiment until one of these genuinely pulls you in.",
         sets: [
           { name: "Artistic", items: ["Drawing", "Writing", "Painting", "Music", "Video", "Craft", "Knitting"] },
           { name: "Educational", items: ["Studying", "Problem solving", "Puzzles", "Podcasts", "Reading", "Learning a new skill"] },
@@ -165,7 +165,7 @@ const ACTIONS = [
       },
       challenge: {
         title: "The 7-day Flow State Challenge",
-        body: "One deep-focus session on your chosen activity every day for the next seven days — morning, afternoon, or both. Tell someone close to you that you're doing it. Every time you notice the pull of distraction and stay with the task anyway, you strengthen the part of your brain that makes focus possible.",
+        body: "One deep-focus session on your chosen activity every day for the next seven days — morning, afternoon, or both. Tell someone close to you that you're doing it.",
       },
     },
   },
@@ -287,7 +287,7 @@ const ACTIONS = [
       },
       challenge: {
         title: "The 7-day Contribution Challenge",
-        body: "One random act of kindness every day for the next seven days, from any of the four areas. Small counts.",
+        body: "One random act of kindness every day for the next seven days, from any of the four areas.",
         items: ["Cook someone a nice meal", "Help somebody with their kids",
                 "Spend time really listening to someone", "Help a colleague with something hard",
                 "Give time or possessions to a charity", "Invent your own act of kindness"],
@@ -322,7 +322,6 @@ const ACTIONS = [
       ],
       groups: {
         title: "Two ways to connect properly",
-        note: "Both give you quality time with someone and a second chemical for free.",
         sets: [
           { name: "Exercising together", items: ["Jogging", "Cycling", "Lifting weights", "Dance classes",
               "Yoga", "Pilates", "Martial arts", "Playing sport"] },
@@ -466,14 +465,14 @@ const ACTIONS = [
       ],
       list: {
         title: "The nature checklist",
-        note: "What the forest-therapy participants actually did — immerse yourself in the present through your senses.",
+        note: "What the forest-therapy participants did — immerse yourself through your senses.",
         items: ["Sight — count how many different colours you can see",
                 "Sound — listen closely to everything you can hear around you",
                 "Smell — breathe in deeply as you walk and notice what you smell"],
       },
       challenge: {
         title: "The Nature Challenge",
-        body: "Three headphone-free walks over the next week. No podcast, no music — just you and what's actually there.",
+        body: "Three headphone-free walks over the next week. No podcast, no music.",
       },
     },
   },
@@ -555,7 +554,7 @@ const ACTIONS = [
         },
         {
           title: "The trolley challenge",
-          body: "Next time you're at the supermarket, use a bag to split your trolley in two. Keep the eighty per cent nearest you full of nutritious food, and allow yourself a handful of treats in the final twenty. You'll come home with far more good food than bad — and that's what you'll reach for later.",
+          body: "Next time you're at the supermarket, use a bag to split your trolley in two. Keep the eighty per cent nearest you full of nutritious food, and allow yourself a handful of treats in the final twenty. You'll come home with far more good food than bad.",
         },
       ],
     },
@@ -589,7 +588,7 @@ const ACTIONS = [
       ],
       extended: {
         title: "On the practice itself",
-        note: "Added guidance, not from the book — the things most people wish they'd been told in the first fortnight.",
+        note: "Added guidance, not from the book.",
         bites: [
           { title: "The wandering is the practice",
             body: "Your mind will drift within seconds, then again, and again. That isn't failure — noticing you've drifted and coming back is the actual repetition. A session where you wandered fifty times and returned fifty times is fifty reps." },
@@ -693,7 +692,7 @@ const ACTIONS = [
       },
       challenge: {
         title: "The Exercise Challenge",
-        body: "Two strength-training sessions and two endurance sessions over the next week. Four in total — that's the whole ask.",
+        body: "Two strength-training sessions and two endurance sessions over the next week.",
       },
     },
   },
@@ -788,7 +787,7 @@ const ACTIONS = [
       }],
       challenge: {
         title: "Three times a day",
-        body: "Run the routine three times a day for a week. It costs you a couple of minutes and your mobility will start to shift.",
+        body: "Run the routine three times a day for a week.",
       },
     },
   },

@@ -296,8 +296,7 @@ function openFeelSheet(picked) {
   let body = sheetHead("Start here", "How are you feeling?", "");
 
   body += `
-    <p class="sheet-lead">Pick whatever is closest. There's no wrong answer, and
-      you don't need to know any of the chemistry — that's the app's job.</p>
+    <p class="sheet-lead">Pick whatever is closest.</p>
     <div class="ex-grid">
       ${FEELINGS.map(f => `
         <button class="ex c-${f.chem} ${picked === f.word ? "on" : ""}"
@@ -309,8 +308,8 @@ function openFeelSheet(picked) {
     body += `
       <div class="diagnosis">
         <div class="diag-line">Good. Then pick whatever appeals.</div>
-        <p class="diag-why">A decent day is the best time to do the thing you'd struggle
-          to face on a bad one. Your four are below.</p>
+        <p class="diag-why">A good day is the best time to do the thing you'd struggle
+          with on a bad one.</p>
       </div>
       ${suggestionList(Object.values(state.chosen).map(id => byId[id]))}`;
   } else if (picked) {
@@ -738,8 +737,8 @@ function openActionSheet(id, keepScroll) {
 
   /* ── the options, which are also the log ── */
 
-  body += `<div class="section-label">${liveSets.length ? L.groups.title : "Ways to do it"}</div>
-    <p class="group-note">Tap whatever you managed — that's how it gets logged. Even the smallest one counts.</p>`;
+  body += `<div class="section-label">${liveSets.length ? L.groups.title : "Ways to do it"}</div>`;
+  if (liveSets.length && L.groups.note) body += `<p class="group-note">${L.groups.note}</p>`;
 
   if (liveSets.length) {
     body += liveSets.map(set => `
