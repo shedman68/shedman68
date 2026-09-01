@@ -229,14 +229,6 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
   font-size: 0.85rem; color: var(--text-2); line-height: 1.5;
 }
 
-/* the explicit affordance — this card opens */
-.action-cta {
-  display: block; margin-top: 9px; padding-left: 34px;
-  font-size: 0.8rem; font-weight: 700;
-}
-.action-cta.c-d { color: var(--d); } .action-cta.c-o { color: var(--o); }
-.action-cta.c-s { color: var(--s); } .action-cta.c-e { color: var(--e); }
-
 .action-picked {
   display: flex; flex-wrap: wrap; gap: 5px;
   margin-top: 9px; padding-left: 34px;

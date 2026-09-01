@@ -391,7 +391,7 @@ function renderActions() {
 
       ${detail.length
         ? `<span class="action-picked">${detail.map(d => `<span>${d}</span>`).join("")}</span>`
-        : `<span class="action-cta c-${a.chem}">See what counts →</span>`}
+        : ""}
     </button>`;
   }).join("");
 }

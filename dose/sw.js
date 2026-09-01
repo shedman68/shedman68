@@ -1,6 +1,6 @@
 /* DOSE Daily — service worker: cache-first app shell, refreshed in the background */
 
-const VERSION = "dose-v2.2.0";
+const VERSION = "dose-v2.3.0";
 const SHELL = [
   ".",
   "index.html",

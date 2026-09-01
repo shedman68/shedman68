@@ -180,11 +180,6 @@ const ACTIONS = [
         { title: "Start with the bed",
           body: "Getting up and making your bed is a tiny, deliberate win banked before the day has had a chance to push you around — and it's the first dopamine of your day, earned rather than swiped." },
       ],
-      list: {
-        title: "Healthy ways to start a morning",
-        items: ["Making your bed", "Going outside", "Cold shower", "Washing your face",
-                "Reading", "Brushing your teeth"],
-      },
     },
   },
   {
@@ -323,9 +318,9 @@ const ACTIONS = [
       groups: {
         title: "Two ways to connect properly",
         sets: [
-          { name: "Exercising together", items: ["Jogging", "Cycling", "Lifting weights", "Dance classes",
+          { name: "Exercising together", reference: true, items: ["Jogging", "Cycling", "Lifting weights", "Dance classes",
               "Yoga", "Pilates", "Martial arts", "Playing sport"] },
-          { name: "In nature", items: ["Walking", "Cycling", "Relaxing on the grass",
+          { name: "In nature", reference: true, items: ["Walking", "Cycling", "Relaxing on the grass",
               "Looking at and smelling plants"] },
         ],
       },
@@ -372,14 +367,6 @@ const ACTIONS = [
           note: "Pair a new habit with something already fixed in your routine.",
           items: ["Mornings — as you make your bed, shower or brush your teeth. Best of all on a morning walk, before you've seen any social media.",
                   "Bedtime — it calms a noisy mind and reassures your brain that you're safe, and often rather better than safe."],
-        },
-        {
-          title: "I am grateful for…",
-          note: "Read through and pick three you genuinely connect with right now.",
-          items: ["A specific friend or family member", "My home and living environment",
-                  "My health, my ability to move, my energy", "My financial stability",
-                  "The opportunities becoming possible for me", "Nature and the beautiful world we live in",
-                  "What I get to eat and drink each day", "My learning and understanding"],
         },
       ],
       challenge: {
@@ -540,10 +527,10 @@ const ACTIONS = [
       groups: {
         title: "Where to get protein",
         sets: [
-          { name: "Meat", items: ["Chicken", "Grass-fed beef", "Turkey"] },
-          { name: "Fish", items: ["Salmon", "Trout", "Cod"] },
-          { name: "Dairy", items: ["Yoghurt"] },
-          { name: "Plants", items: ["Tofu", "Seitan", "Beans and legumes"] },
+          { name: "Meat", reference: true, items: ["Chicken", "Grass-fed beef", "Turkey"] },
+          { name: "Fish", reference: true, items: ["Salmon", "Trout", "Cod"] },
+          { name: "Dairy", reference: true, items: ["Yoghurt"] },
+          { name: "Plants", reference: true, items: ["Tofu", "Seitan", "Beans and legumes"] },
         ],
       },
       caution: "Probiotics are not a substitute for medication. If you're taking something for your mental health and it's working, that's great — follow your GP's or psychiatrist's guidance. Probiotics may offer additional support alongside it.",
@@ -580,7 +567,7 @@ const ACTIONS = [
         { title: "Three breaths, then close your eyes",
           body: "Sit down and take three full inhales and exhales. Close your eyes on the third exhale, then take three more." },
         { title: "Choose your breathing",
-          body: "Resonance breathing or sigh breathing — whichever of the two genuinely calms you more. Breathe that way for two to three minutes." },
+          body: "Resonance — in through the nose for four seconds, out through the mouth for six. Or sigh — a deep breath in, a short sharp top-up breath, then a long sigh out. Whichever calms you more, for two to three minutes." },
         { title: "Scan your body head to toe",
           body: "Start at your head: any sensations in your eyes, nose or mouth? Then your throat, shoulders, chest and stomach. Then your thighs, and down to your feet. You're learning to feel your body, not fix it." },
         { title: "Open your eyes",
@@ -604,11 +591,6 @@ const ACTIONS = [
       },
       quote: "Becoming an underthinker is possible, starting from today.",
       list: [
-        {
-          title: "Two breathing patterns",
-          items: ["Resonance breathing — in through the nose for four seconds, out through the mouth for six. Ten-second cycles, six breaths a minute.",
-                  "Sigh breathing — a deep breath in through the nose, then a short sharp top-up breath in, then a long sigh out through the mouth. Double inhale, big exhale."],
-        },
         {
           title: "When you're already overthinking",
           items: ["Breathe first — calm the body before you try to sort out the thought.",
@@ -653,8 +635,7 @@ const ACTIONS = [
         },
         {
           title: "Calming a busy mind at night",
-          items: ["A consistent bedtime — your brain learns the pattern and starts preparing itself",
-                  "Gratitude as you lie there, especially on the nights that feel worried",
+          items: ["Gratitude as you lie there, especially on the nights that feel worried",
                   "Resonance breathing afterwards, and again if you wake in the night",
                   "Writing — keep pen and paper by the bed and get the thoughts out of your head",
                   "Listening — on nights you truly can't sleep, stop fighting it and put on sleep music or a calm podcast"],
@@ -838,7 +819,7 @@ const EXAMPLES = {
   music: ["Sang along", "Danced", "Morning playlist", "Learned some lyrics", "Live music"],
   laughter: ["Laughed with someone", "Comedy", "Something daft online", "Messing about with kids",
              "Shared a joke"],
-  stretch: ["The full routine ×3", "Reach-ups", "Reach-downs", "Twists", "Bar hang", "Yoga"],
+  stretch: ["The full routine", "One round", "Bar hang", "Yoga"],
 };
 
 /* ─── What each one gives you ───
