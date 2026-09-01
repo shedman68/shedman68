@@ -665,41 +665,23 @@ function movementBlock(m, chem) {
 
 /* ── Action sheet ── */
 
-function openActionSheet(id, keepScroll, openDeep) {
+let openWhy = null;   // which "why" chunk is expanded
+let whyFor = null;    // and which action it belongs to
+
+function openActionSheet(id, keepScroll) {
   const a = byId[id], chem = CHEMS[a.chem], color = CHEM_COLORS[a.chem];
   const L = a.learn || {};
   const picked = todayDetails(id);
   const done = isChecked(id);
   const weekCount = countThisWeek(id);
 
-  /* ── 1. what it is, and the fast way to log it ── */
+  if (whyFor !== id) { openWhy = null; whyFor = id; }
+
   let body = `
     ${sheetHead(`${chem.name} · ${TIME_LABEL[a.time]}`, `${a.emoji} ${a.title}`, color)}
-    <p class="sheet-lead">${a.short}</p>
-    <div class="gives-big c-${a.chem}">Gives you: ${GIVES[id]}</div>
+    <p class="sheet-lead">${a.short}</p>`;
 
-    <div class="section-label">What did you do?</div>
-    <div class="ex-grid">
-      ${(EXAMPLES[id] || []).map(x => `
-        <button class="ex c-${a.chem} ${picked.includes(x) ? "on" : ""} ${x === flashEx ? "just" : ""}"
-          data-ex="${id}" data-exval="${x.replace(/"/g, "&quot;")}">${x}</button>`).join("")}
-    </div>
-
-    <button class="btn-done ${done ? "is-done" : ""}" data-done="${id}">
-      ${done ? "✓ Done today" : "Mark as done"}
-    </button>
-    ${done && weekCount > 1
-      ? `<p class="competence">That's your ${ORDINAL[weekCount] || weekCount + "th"} this week.</p>`
-      : ""}
-
-    ${!done ? `
-      <div class="tiny-card">
-        <div class="tiny-label">Short on time or energy?</div>
-        <div class="tiny-body">${TINY[id]}</div>
-        <button class="tiny-btn c-${a.chem}" data-tiny="${id}">That'll do — mark it done</button>
-      </div>` : ""}`;
-
-  /* ── 2. how to do it — visible, because it's what you act on ── */
+  /* ── 1. how to do it ── */
 
   if (L.steps) {
     body += `<div class="section-label">${L.stepsTitle || "How to do it"}</div><div class="steps">` +
@@ -756,30 +738,33 @@ function openActionSheet(id, keepScroll, openDeep) {
 
   if (L.caution) body += `<div class="caution">${L.caution}</div>`;
 
-  /* ── 3. why it works — folded away, read when you want to ── */
+  /* ── 2. log it — ticking an example is the whole interaction ── */
+
+  body += `
+    <div class="section-label">What did you do?</div>
+    <p class="group-note">Tap whatever you managed. Even the smallest one counts.</p>
+    <div class="ex-grid">
+      ${(EXAMPLES[id] || []).map(x => `
+        <button class="ex c-${a.chem} ${picked.includes(x) ? "on" : ""} ${x === flashEx ? "just" : ""}"
+          data-ex="${id}" data-exval="${x.replace(/"/g, "&quot;")}">${x}</button>`).join("")}
+    </div>
+    ${done && weekCount > 1
+      ? `<p class="competence">✓ Logged — that's your ${ORDINAL[weekCount] || weekCount + "th"} this week.</p>`
+      : done ? `<p class="competence">✓ Logged for today.</p>` : ""}`;
+
+  /* ── 3. why it works, in chunks you can open one at a time ── */
 
   const why = L.bites || [];
-  const hasWhy = why.length || L.extended || L.quote || L.challenge || REFLECT[id];
 
-  if (hasWhy) {
-    body += `
-      <button class="disclose ${openDeep ? "open" : ""}" data-deep="${id}">
-        ${openDeep ? "Hide why this works" : "Why this works"} <span class="chev">${openDeep ? "▲" : "▼"}</span>
-      </button>`;
+  if (why.length) {
+    body += `<div class="section-label">Why this works</div>${whyList(why, a.chem, 0)}`;
   }
-
-  if (!openDeep) {
-    body += `<div class="sheet-cta">${chooseCta(a, chem)}</div>`;
-    return openSheet(body, keepScroll);
-  }
-
-  if (why.length) body += biteCards(why, a.chem);
 
   if (L.extended) {
     body += `
       <div class="section-label">${L.extended.title}</div>
       <p class="extra-note">${L.extended.note}</p>
-      ${biteCards(L.extended.bites, a.chem)}`;
+      ${whyList(L.extended.bites, a.chem, why.length)}`;
   }
 
   if (L.quote) body += `<blockquote class="quote c-${a.chem}">“${L.quote}”</blockquote>`;
@@ -805,6 +790,25 @@ function openActionSheet(id, keepScroll, openDeep) {
 
   body += `<div class="sheet-cta">${chooseCta(a, chem)}</div>`;
   openSheet(body, keepScroll);
+}
+
+/* Why, as headlines you open one at a time — the reasoning is worth
+   having, a wall of it is not. `offset` keeps indices unique across
+   the two groups on a sheet. */
+function whyList(bites, chem, offset) {
+  return `<div class="why-list">` + bites.map((b, i) => {
+    const n = i + offset;
+    const open = openWhy === n;
+    return `
+      <div class="why-item ${open ? "open" : ""}">
+        <button class="why-head" data-why="${n}">
+          <span class="why-dot c-${chem}"></span>
+          <span class="why-title">${b.title}</span>
+          <span class="why-chev">${open ? "−" : "+"}</span>
+        </button>
+        ${open ? `<p class="why-body">${b.body}</p>` : ""}
+      </div>`;
+  }).join("") + `</div>`;
 }
 
 /* the pick-this / close pair at the foot of an action sheet */
@@ -837,7 +841,7 @@ function toggleExample(id, value) {
 
   if (navigator.vibrate) navigator.vibrate(8);
   renderToday();
-  openActionSheet(id, true, document.querySelector(".disclose.open") !== null);
+  openActionSheet(id, true);
 }
 
 /* ── Settings sheet ── */
@@ -1052,26 +1056,15 @@ document.addEventListener("click", e => {
   const feel = e.target.closest("[data-feel]");
   if (feel) return openFeelSheet(feel.dataset.feel);
 
+  const whyBtn = e.target.closest("[data-why]");
+  if (whyBtn) {
+    const n = Number(whyBtn.dataset.why);
+    openWhy = openWhy === n ? null : n;
+    return openActionSheet(whyFor, true);
+  }
+
   const ex = e.target.closest("[data-ex]");
   if (ex) return toggleExample(ex.dataset.ex, ex.dataset.exval);
-
-  const tiny = e.target.closest("[data-tiny]");
-  if (tiny) {
-    const id = tiny.dataset.tiny;
-    if (!isChecked(id)) toggleAction(id);
-    renderToday();
-    return openActionSheet(id, true, document.querySelector(".disclose.open") !== null);
-  }
-
-  const doneBtn = e.target.closest("[data-done]");
-  if (doneBtn) {
-    const id = doneBtn.dataset.done;
-    toggleAction(id);
-    return openActionSheet(id, true, document.querySelector(".disclose.open") !== null);
-  }
-
-  const deep = e.target.closest("[data-deep]");
-  if (deep) return openActionSheet(deep.dataset.deep, true, !deep.classList.contains("open"));
 
   const learn = e.target.closest("[data-learn]");
   if (learn) {

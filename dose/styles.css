@@ -568,17 +568,6 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
 .ex.on.c-s { background: var(--s); }
 .ex.on.c-e { background: var(--e); }
 
-.btn-done {
-  width: 100%;
-  border: 1.5px solid var(--line);
-  background: var(--surface);
-  border-radius: 999px; padding: 14px;
-  font-weight: 700; font-size: 0.98rem;
-  transition: transform 0.12s ease;
-}
-.btn-done:active { transform: scale(0.985); }
-.btn-done.is-done { background: var(--check); border-color: var(--check); color: #fff; }
-
 /* the satisfying bit: a chip you just ticked pops */
 @keyframes exPop {
   0% { transform: scale(1); }
@@ -591,25 +580,6 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
   text-align: center; margin-top: 10px;
   font-size: 0.84rem; font-weight: 600; color: var(--text-2);
 }
-
-/* Two-minute version */
-
-.tiny-card {
-  margin-top: 16px; padding: 14px 16px;
-  background: var(--surface-2); border-radius: 15px;
-}
-.tiny-label {
-  font-size: 0.66rem; font-weight: 800; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--text-2); margin-bottom: 6px;
-}
-.tiny-body { font-size: 0.95rem; font-weight: 700; line-height: 1.4; margin-bottom: 11px; }
-.tiny-btn {
-  width: 100%; padding: 11px;
-  border-radius: 999px; font-size: 0.86rem; font-weight: 700;
-  color: #fff;
-}
-.tiny-btn.c-d { background: var(--d); } .tiny-btn.c-o { background: var(--o); }
-.tiny-btn.c-s { background: var(--s); } .tiny-btn.c-e { background: var(--e); }
 
 /* Insight, behind a button */
 
@@ -681,26 +651,32 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
 .suggest.done { opacity: 0.62; }
 .suggest.done .action-state { background: var(--check); color: #fff; opacity: 1; font-size: 0.9rem; }
 
-/* Why this one — the guidance, up front */
+/* Why, in chunks — headline visible, body on tap */
 
-.gives-big {
-  display: inline-block; margin: 10px 0 4px;
-  font-size: 0.9rem; font-weight: 800;
-  padding: 7px 14px; border-radius: 999px; color: #fff;
+.why-list { display: flex; flex-direction: column; gap: 7px; }
+
+.why-item {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 14px; overflow: hidden;
 }
-.gives-big.c-d { background: var(--d); } .gives-big.c-o { background: var(--o); }
-.gives-big.c-s { background: var(--s); } .gives-big.c-e { background: var(--e); }
+.why-item.open { background: var(--surface-2); }
 
-.why {
-  margin-bottom: 9px; padding: 14px 16px;
-  background: var(--surface-2); border-radius: 15px;
-  border-left: 3px solid var(--line);
+.why-head {
+  width: 100%; text-align: left;
+  display: flex; align-items: center; gap: 10px;
+  padding: 13px 15px;
 }
-.why.c-d { border-left-color: var(--d); } .why.c-o { border-left-color: var(--o); }
-.why.c-s { border-left-color: var(--s); } .why.c-e { border-left-color: var(--e); }
+.why-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.why-dot.c-d { background: var(--d); } .why-dot.c-o { background: var(--o); }
+.why-dot.c-s { background: var(--s); } .why-dot.c-e { background: var(--e); }
 
-.why-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 5px; }
-.why-body { font-size: 0.86rem; color: var(--text-2); line-height: 1.6; }
+.why-title { flex: 1; min-width: 0; font-size: 0.9rem; font-weight: 700; line-height: 1.35; }
+.why-chev { color: var(--text-2); font-size: 1.1rem; font-weight: 700; flex-shrink: 0; }
+
+.why-body {
+  padding: 0 15px 14px 32px;
+  font-size: 0.86rem; color: var(--text-2); line-height: 1.6;
+}
 
 .nudge-tiny { display: block; margin-top: 6px; font-size: 0.82rem; color: var(--text-2); }
 
