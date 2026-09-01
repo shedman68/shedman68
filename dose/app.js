@@ -13,6 +13,8 @@ const CHEM_COLORS = { d: "var(--d)", o: "var(--o)", s: "var(--s)", e: "var(--e)"
 
 /* ─── State ─── */
 
+const APP_VERSION = "2.4.0";   // keep in step with VERSION in sw.js
+
 const STORE_KEY = "doseDaily_v1";
 
 /* Stamped on every save and carried into exports, so a future sync or
@@ -897,7 +899,8 @@ function openSettings() {
         <button class="btn-small btn-danger" data-act="reset">Reset everything</button>
       </div>
     </div>
-    <p class="sheet-sub">Your DOSE history is stored only on this device. Export now and then to keep a backup.</p>`);
+    <p class="sheet-sub">Your DOSE history is stored only on this device. Export now and then to keep a backup.</p>
+    <p class="version">Version ${APP_VERSION}</p>`);
 
   renderReminders();
 }
@@ -1185,6 +1188,41 @@ if (state.onboarded) {
   startOnboarding();
 }
 
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+/* Keep the installed app honest about which version it's running.
+   A cache-first service worker will happily serve yesterday's build
+   forever, so: check for a new one whenever the app comes back to the
+   foreground, and when one takes over, reload — silently if nothing is
+   open, otherwise offer a tap. */
+
+let reloading = false;
+
+function applyUpdate() {
+  if (reloading) return;
+  reloading = true;
+  location.reload();
 }
+
+if ("serviceWorker" in navigator) {
+  /* On a first-ever install the controller also changes — that's not an
+     update, so only react when one was already in charge. */
+  const hadController = Boolean(navigator.serviceWorker.controller);
+
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (!hadController) return;
+    const busy = !$("sheetBackdrop").classList.contains("hidden") ||
+                 !$("onboarding").classList.contains("hidden");
+    if (busy) $("updateBar").classList.remove("hidden");
+    else applyUpdate();
+  });
+
+  window.addEventListener("load", async () => {
+    try {
+      const reg = await navigator.serviceWorker.register("sw.js");
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) reg.update().catch(() => {});
+      });
+    } catch (e) { /* offline, or unsupported — the app still works */ }
+  });
+}
+
+$("updateBar").addEventListener("click", applyUpdate);

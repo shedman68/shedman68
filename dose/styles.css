@@ -474,6 +474,24 @@ h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; }
 }
 .btn-danger { color: #d64550; }
 
+/* ═══ Update bar ═══ */
+
+.update-bar {
+  position: fixed; left: 50%; bottom: calc(var(--sab) + 86px);
+  transform: translateX(-50%);
+  max-width: 90%;
+  background: var(--text); color: var(--bg);
+  border-radius: 999px; padding: 12px 22px;
+  font-size: 0.88rem; font-weight: 700;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+  z-index: 61;
+}
+
+.version {
+  text-align: center; font-size: 0.72rem; color: var(--text-2);
+  opacity: 0.6; margin-top: 18px;
+}
+
 /* ═══ Toast ═══ */
 
 .toast {
